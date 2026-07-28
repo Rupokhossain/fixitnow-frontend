@@ -32,15 +32,19 @@ export default function Navbar() {
 
           {/* Desktop Auth Buttons */}
           <div className="hidden items-center space-x-3 md:flex">
-            <Button
-              variant="outline"
-              className="text-primary hover:bg-secondary"
-            >
-              Login
-            </Button>
-            <Button className="bg-primary text-white hover:bg-primary/90">
-              Register
-            </Button>
+            <Link href="/auth/login">
+              <Button
+                variant="outline"
+                className="text-primary hover:bg-secondary"
+              >
+                Login
+              </Button>
+            </Link>
+            <Link href="/auth/register">
+              <Button className="bg-primary text-white hover:bg-primary/90">
+                Register
+              </Button>
+            </Link>
           </div>
 
           {/* Mobile Menu Button */}
@@ -74,10 +78,10 @@ export default function Navbar() {
               href="#services"
               className="block py-2 font-medium text-foreground hover:text-primary"
             >
-              Browse Services 
+              Browse Services
             </Link>
             <div className="mt-4 flex flex-col space-y-2 border-t border-border pt-4">
-              <Link href="/login">
+              <Link href="/auth/login">
                 <Button
                   variant="outline"
                   className="w-full text-primary hover:bg-secondary"
@@ -85,9 +89,11 @@ export default function Navbar() {
                   Login
                 </Button>
               </Link>
-              <Button className="w-full bg-primary text-white hover:bg-primary/90">
-                Register
-              </Button>
+              <Link href="/auth/register">
+                <Button className="w-full bg-primary text-white hover:bg-primary/90">
+                  Register
+                </Button>
+              </Link>
             </div>
           </div>
         )}
