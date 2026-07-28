@@ -1,12 +1,9 @@
-import { Button } from "@/components/ui/button"
+import HeroSection from "@/components/shared/hero-section"
 
 const HomePage = async () => {
   return (
     <div>
-      hello next js
-      <Button size={"xs"} variant={"destructive"}>
-        Click Me
-      </Button>
+        <HeroSection></HeroSection>
     </div>
   )
 }
