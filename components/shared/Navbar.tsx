@@ -1,44 +1,44 @@
-'use client'
+"use client"
 
-import { Button } from '@/components/ui/button'
-import { Wrench } from 'lucide-react'
-import Link from 'next/link'
-import { useState } from 'react'
+import { Button } from "@/components/ui/button"
+import { Wrench } from "lucide-react"
+import Link from "next/link"
+import { useState } from "react"
 
 export default function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 
   return (
-    <nav className="sticky top-0 z-50 bg-white border-b border-border shadow-sm">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
+    <nav className="sticky top-0 z-50 border-b border-border bg-white shadow-sm">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="flex h-16 items-center justify-between">
           {/* Logo */}
           <div className="flex items-center space-x-2">
-            <div className="bg-primary rounded-lg p-2">
-              <Wrench className="w-5 h-5 text-white" />
+            <div className="rounded-lg bg-primary p-2">
+              <Wrench className="h-5 w-5 text-white" />
             </div>
             <span className="text-xl font-bold text-foreground">FixItNow</span>
           </div>
 
           {/* Desktop Menu */}
-          <div className="hidden md:flex items-center space-x-8">
+          <div className="hidden items-center space-x-8 md:flex">
             <Link
               href="#services"
-              className="text-foreground hover:text-primary transition-colors font-medium"
+              className="font-medium text-foreground transition-colors hover:text-primary"
             >
               Browse Services
             </Link>
           </div>
 
           {/* Desktop Auth Buttons */}
-          <div className="hidden md:flex items-center space-x-3">
+          <div className="hidden items-center space-x-3 md:flex">
             <Button
               variant="outline"
               className="text-primary hover:bg-secondary"
             >
               Login
             </Button>
-            <Button className="bg-primary hover:bg-primary/90 text-white">
+            <Button className="bg-primary text-white hover:bg-primary/90">
               Register
             </Button>
           </div>
@@ -47,11 +47,11 @@ export default function Navbar() {
           <div className="md:hidden">
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="text-foreground hover:text-primary transition-colors"
+              className="text-foreground transition-colors hover:text-primary"
               aria-label="Toggle menu"
             >
               <svg
-                className="w-6 h-6"
+                className="h-6 w-6"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -69,21 +69,23 @@ export default function Navbar() {
 
         {/* Mobile Menu */}
         {isMobileMenuOpen && (
-          <div className="md:hidden pb-4 border-t border-border">
+          <div className="border-t border-border pb-4 md:hidden">
             <Link
               href="#services"
-              className="block text-foreground hover:text-primary py-2 font-medium"
+              className="block py-2 font-medium text-foreground hover:text-primary"
             >
-              Browse Services
+              Browse Services 
             </Link>
-            <div className="flex flex-col space-y-2 mt-4 pt-4 border-t border-border">
-              <Button
-                variant="outline"
-                className="w-full text-primary hover:bg-secondary"
-              >
-                Login
-              </Button>
-              <Button className="w-full bg-primary hover:bg-primary/90 text-white">
+            <div className="mt-4 flex flex-col space-y-2 border-t border-border pt-4">
+              <Link href="/login">
+                <Button
+                  variant="outline"
+                  className="w-full text-primary hover:bg-secondary"
+                >
+                  Login
+                </Button>
+              </Link>
+              <Button className="w-full bg-primary text-white hover:bg-primary/90">
                 Register
               </Button>
             </div>
