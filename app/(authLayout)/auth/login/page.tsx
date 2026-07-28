@@ -14,6 +14,7 @@ import { Label } from '@/components/ui/label'
 import { Lock, Mail, Wrench } from 'lucide-react'
 import Link from 'next/link'
 
+
 export default function LoginPage() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-secondary/30 px-4 py-12">
