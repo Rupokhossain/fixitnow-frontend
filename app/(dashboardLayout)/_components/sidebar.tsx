@@ -8,74 +8,90 @@ import {
   ClipboardList,
   Users,
   Settings,
+  Layers,
+  Clock,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
-interface SidebarProps {
-  userRole?: 'customer' | 'technician' | 'admin'
-}
-
-export function Sidebar({ userRole = 'customer' }: SidebarProps) {
+export function Sidebar() {
   const pathname = usePathname()
+
+  const segments = pathname.split('/')
+  const userRoleFromPath = segments[2] as 'customer' | 'technician' | 'admin'
+
+  const role = userRoleFromPath || 'customer'
+  const basePath = `/dashboard/${role}`
 
   const navItems = [
     {
       label: 'Overview',
-      href: '/dashboard',
+      href: basePath,
       icon: LayoutDashboard,
     },
-    ...(userRole === 'customer'
+    ...(role === 'customer'
       ? [
           {
             label: 'My Bookings',
-            href: '/dashboard/bookings',
+            href: `${basePath}/bookings`,
             icon: Calendar,
           },
         ]
       : []),
-    ...(userRole === 'technician'
+    ...(role === 'technician'
       ? [
           {
             label: 'Service Requests',
-            href: '/dashboard/requests',
+            href: `${basePath}/my-services`,
             icon: ClipboardList,
+          },
+          {
+            label: 'Scheduler',
+            href: `${basePath}/scheduler`,
+            icon: Clock,
           },
         ]
       : []),
-    ...(userRole === 'admin'
+    ...(role === 'admin'
       ? [
           {
             label: 'User Management',
-            href: '/dashboard/users',
+            href: `${basePath}/users`,
             icon: Users,
+          },
+          {
+            label: 'Categories',
+            href: `${basePath}/categories`,
+            icon: Layers,
           },
         ]
       : []),
     {
       label: 'Settings',
-      href: '/dashboard/settings',
+      href: `${basePath}/settings`,
       icon: Settings,
     },
   ]
 
   return (
-    <aside className="fixed left-0 top-0 h-screen w-64 border-r border-gray-200 bg-white pt-20 transition-all duration-300 lg:block hidden">
-      <nav className="space-y-2 px-4">
+    <aside className="fixed left-0 top-0 h-screen w-64 border-r border-gray-200 bg-white pt-20 transition-all duration-300 lg:block hidden z-30">
+      <nav className="space-y-1 px-4 mt-4">
         {navItems.map((item) => {
           const Icon = item.icon
+          // কারেন্ট লিঙ্কে আছে কি না চেক করার জন্য
           const isActive = pathname === item.href
+          
           return (
             <Link
               key={item.href}
               href={item.href}
               className={cn(
-                'flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium transition-colors',
+                'flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium transition-all group',
                 isActive
-                  ? 'bg-blue-50 text-blue-600'
-                  : 'text-gray-700 hover:bg-gray-50'
+                  ? 'bg-blue-600 text-white shadow-md'
+                  : 'text-gray-600 hover:bg-blue-50 hover:text-blue-600'
               )}
             >
-              <Icon className="h-5 w-5" />
+              <Icon className={cn('h-5 w-5', isActive ? 'text-white' : 'text-gray-400 group-hover:text-blue-600')} />
               {item.label}
             </Link>
           )

@@ -1,4 +1,3 @@
-import Navbar from "@/components/shared/Navbar"
 import { Sidebar } from "./_components/sidebar"
 import { Header } from "./_components/header"
 
@@ -11,12 +10,10 @@ const DashboardLayout = async(
     }
 ) => {
 
-    const userRole = "customer"
 
   return ( 
     <div className="min-h-screen bg-gray-50">
-      {/* Sidebar - ডানে রোল পাস করো */}
-      <Sidebar userRole={userRole} />
+      <Sidebar />
 
       {/* Header */}
       <Header userName="James Miller" />

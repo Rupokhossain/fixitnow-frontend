@@ -18,7 +18,7 @@ export function Dashboard({ userRole = 'customer' }: DashboardProps) {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Sidebar */}
-      <Sidebar userRole={currentRole} />
+      <Sidebar />
 
       {/* Header */}
       <Header userName="James Miller" />
