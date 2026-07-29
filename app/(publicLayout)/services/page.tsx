@@ -113,7 +113,7 @@ export default function ServicePage() {
                 <div className="flex flex-col sm:flex-row gap-6 items-start">
                   {/* Avatar */}
                   <Avatar className="size-24 ring-2 ring-primary/20">
-                    <AvatarImage src="/technician-avatar.png" alt="James Miller" />
+                    <AvatarImage src="/images/technician-avatar.png" alt="James Miller" />
                     <AvatarFallback>JM</AvatarFallback>
                   </Avatar>
 
@@ -204,7 +204,7 @@ export default function ServicePage() {
           {/* Right Column - Booking Card (Sticky) */}
           <div className="lg:col-span-1">
             <Card className="sticky top-4 border-0 shadow-xl">
-              <CardHeader className="border-b bg-linear-to-r from-primary/10 to-primary/5">
+              <CardHeader className="border-b bg-linear-to-r from-primary/10 to-primary/5 p-4">
                 <CardTitle>Book a Service</CardTitle>
                 <CardDescription>Select your preferred date and time</CardDescription>
               </CardHeader>
