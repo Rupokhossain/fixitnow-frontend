@@ -23,7 +23,7 @@ const colorClasses = {
   purple: 'bg-purple-50 text-purple-600',
 }
 
-export function OverviewCards() {
+export default function OverviewCards() {
   const cards: OverviewCard[] = [
     {
       title: 'Total Bookings',

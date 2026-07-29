@@ -3,8 +3,8 @@
 import { useState } from 'react'
 import { Sidebar } from './sidebar'
 import { Header } from './header'
-import { OverviewCards } from './overview-card'
 import { BookingsTable } from './bookings-table'
+import OverviewCards from './overview-card'
 
 type UserRole = 'customer' | 'technician' | 'admin'
 
@@ -12,7 +12,7 @@ interface DashboardProps {
   userRole?: UserRole
 }
 
-export function Dashboard({ userRole = 'customer' }: DashboardProps) {
+export default function Dashboard({ userRole = 'customer' }: DashboardProps) {
   const [currentRole, setCurrentRole] = useState<UserRole>(userRole)
 
   return (

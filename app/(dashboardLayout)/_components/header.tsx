@@ -21,7 +21,7 @@ export function Header({ userName = 'James Miller' }: HeaderProps) {
   const [hasNotifications, setHasNotifications] = useState(true)
 
   return (
-    <header className="fixed top-0 right-0 left-64 h-20 border-b border-gray-200 bg-white px-8 flex items-center justify-between z-40 lg:left-64 md:left-0 left-0">
+    <header className="fixed top-0 right-0 left-64 h-20 border-b border-gray-200 bg-white px-8 flex items-center justify-between z-40 lg:left-64 md:left-0">
       {/* Search Bar */}
       <div className="flex-1 max-w-md">
         <div className="relative">

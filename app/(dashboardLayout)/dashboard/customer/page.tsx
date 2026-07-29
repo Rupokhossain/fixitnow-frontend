@@ -1,6 +1,6 @@
 import React from 'react'
-import { OverviewCards } from '../../_components/overview-card'
 import { BookingsTable } from '../../_components/bookings-table'
+import OverviewCards from '../../_components/overview-card'
 
 const CustomerPage = () => {
   return (

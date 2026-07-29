@@ -7,7 +7,6 @@ import {
   Calendar,
   ClipboardList,
   Users,
-  Settings,
   Layers,
   Clock,
 } from 'lucide-react'
@@ -65,11 +64,7 @@ export function Sidebar() {
           },
         ]
       : []),
-    {
-      label: 'Settings',
-      href: `${basePath}/settings`,
-      icon: Settings,
-    },
+
   ]
 
   return (
@@ -77,7 +72,7 @@ export function Sidebar() {
       <nav className="space-y-1 px-4 mt-4">
         {navItems.map((item) => {
           const Icon = item.icon
-          // কারেন্ট লিঙ্কে আছে কি না চেক করার জন্য
+       
           const isActive = pathname === item.href
           
           return (
