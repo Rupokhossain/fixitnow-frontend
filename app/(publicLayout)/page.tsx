@@ -130,13 +130,13 @@ export default function Page() {
               Something went wrong while fetching services.
             </div>
           ) : (
-            /* ৬. আসল ডাটা দিয়ে গ্রিড রেন্ডার করা */
+
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
               {services.map((service: any) => (
                 <ServiceCard
                   key={service._id || service.id}
-                  image={service.image || '/images/plumbing.png'} // ব্যাকএন্ডে ইমেজ না থাকলে ফলব্যাক
-                  serviceName={service.name} // তোমার ডাটাবেসের ফিল্ড অনুযায়ী নাম দাও
+                  image={service.image || '/images/plumbing.png'} 
+                  serviceName={service.name}
                   technicianName={service.provider?.name || "Verified Pro"}
                   rating={service.rating || 5.0}
                   reviews={service.reviewCount || 0}
