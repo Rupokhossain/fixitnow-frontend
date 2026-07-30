@@ -6,7 +6,7 @@ export const baseApi = createApi({
     baseUrl: "http://localhost:8000/api",
     credentials: "include", 
   }),
-  tagTypes: ["Services", "Bookings", "Users"],
+  tagTypes: ["Services", "Bookings", "Users","Categories"],
   endpoints: (builder) => ({
     getServices: builder.query({
       query: () => "/services",
