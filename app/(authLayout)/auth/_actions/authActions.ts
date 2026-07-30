@@ -26,7 +26,6 @@ export const loginAction = async (
   prevState: LoginState,
   formData: FormData
 ) => {
-
   
   const email = formData.get("email")
   const password = formData.get("password")

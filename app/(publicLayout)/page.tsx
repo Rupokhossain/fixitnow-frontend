@@ -1,65 +1,69 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+"use client"
 
 import HeroSection from '@/components/shared/hero-section'
 import ServiceCard from '@/components/shared/service-card'
 import { Button } from '@/components/ui/button'
-import { CheckCircle2, Clock, Shield } from 'lucide-react'
+import { CheckCircle2, Clock, Shield, Loader2 } from 'lucide-react'
+import { useGetServicesQuery } from '../redux/api/baseApi'
 
-const services = [
-  {
-    id: 1,
-    image: '/images/plumbing.png',
-    serviceName: 'Plumbing Services',
-    technicianName: 'John Smith',
-    rating: 4.8,
-    reviews: 156,
-    startingPrice: 79,
-  },
-  {
-    id: 2,
-    image: '/images/electrical.png',
-    serviceName: 'Electrical Work',
-    technicianName: 'Mike Johnson',
-    rating: 4.9,
-    reviews: 203,
-    startingPrice: 89,
-  },
-  {
-    id: 3,
-    image: '/images/hvac.png',
-    serviceName: 'HVAC Maintenance',
-    technicianName: 'David Wilson',
-    rating: 4.7,
-    reviews: 128,
-    startingPrice: 99,
-  },
-  {
-    id: 4,
-    image: '/images/cleaning.png',
-    serviceName: 'House Cleaning',
-    technicianName: 'Sarah Miller',
-    rating: 4.9,
-    reviews: 342,
-    startingPrice: 59,
-  },
-  {
-    id: 5,
-    image: '/images/painting.png',
-    serviceName: 'Interior Painting',
-    technicianName: 'Robert Brown',
-    rating: 4.8,
-    reviews: 98,
-    startingPrice: 129,
-  },
-  {
-    id: 6,
-    image: '/images/carpentry.png',
-    serviceName: 'Carpentry & Repairs',
-    technicianName: 'James Davis',
-    rating: 4.6,
-    reviews: 87,
-    startingPrice: 119,
-  },
-]
+
+// const services = [
+//   {
+//     id: 1,
+//     image: '/images/plumbing.png',
+//     serviceName: 'Plumbing Services',
+//     technicianName: 'John Smith',
+//     rating: 4.8,
+//     reviews: 156,
+//     startingPrice: 79,
+//   },
+//   {
+//     id: 2,
+//     image: '/images/electrical.png',
+//     serviceName: 'Electrical Work',
+//     technicianName: 'Mike Johnson',
+//     rating: 4.9,
+//     reviews: 203,
+//     startingPrice: 89,
+//   },
+//   {
+//     id: 3,
+//     image: '/images/hvac.png',
+//     serviceName: 'HVAC Maintenance',
+//     technicianName: 'David Wilson',
+//     rating: 4.7,
+//     reviews: 128,
+//     startingPrice: 99,
+//   },
+//   {
+//     id: 4,
+//     image: '/images/cleaning.png',
+//     serviceName: 'House Cleaning',
+//     technicianName: 'Sarah Miller',
+//     rating: 4.9,
+//     reviews: 342,
+//     startingPrice: 59,
+//   },
+//   {
+//     id: 5,
+//     image: '/images/painting.png',
+//     serviceName: 'Interior Painting',
+//     technicianName: 'Robert Brown',
+//     rating: 4.8,
+//     reviews: 98,
+//     startingPrice: 129,
+//   },
+//   {
+//     id: 6,
+//     image: '/images/carpentry.png',
+//     serviceName: 'Carpentry & Repairs',
+//     technicianName: 'James Davis',
+//     rating: 4.6,
+//     reviews: 87,
+//     startingPrice: 119,
+//   },
+// ]
 
 const features = [
   {
@@ -80,6 +84,10 @@ const features = [
 ]
 
 export default function Page() {
+
+  const { data, isLoading, isError } = useGetServicesQuery({})
+  const services = data?.data || [] 
+  
   return (
     <main className="bg-background">
       <HeroSection />
@@ -99,7 +107,7 @@ export default function Page() {
           </div>
 
           {/* Service Cards Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+          {/* <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
             {services.map((service) => (
               <ServiceCard
                 key={service.id}
@@ -111,7 +119,36 @@ export default function Page() {
                 startingPrice={service.startingPrice}
               />
             ))}
-          </div>
+          </div> */}
+                    {isLoading ? (
+            <div className="flex flex-col items-center justify-center py-20">
+              <Loader2 className="h-10 w-10 animate-spin text-primary" />
+              <p className="mt-4 text-muted-foreground">Fetching latest services...</p>
+            </div>
+          ) : isError ? (
+            <div className="text-center py-20 text-red-500">
+              Something went wrong while fetching services.
+            </div>
+          ) : (
+            /* ৬. আসল ডাটা দিয়ে গ্রিড রেন্ডার করা */
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+              {services.map((service: any) => (
+                <ServiceCard
+                  key={service._id || service.id}
+                  image={service.image || '/images/plumbing.png'} // ব্যাকএন্ডে ইমেজ না থাকলে ফলব্যাক
+                  serviceName={service.name} // তোমার ডাটাবেসের ফিল্ড অনুযায়ী নাম দাও
+                  technicianName={service.provider?.name || "Verified Pro"}
+                  rating={service.rating || 5.0}
+                  reviews={service.reviewCount || 0}
+                  startingPrice={service.price}
+                />
+              ))}
+            </div>
+          )}
+          
+          {services.length === 0 && !isLoading && (
+            <p className="text-center text-muted-foreground">No services available right now.</p>
+          )}
         </div>
       </section>
 
