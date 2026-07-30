@@ -1,5 +1,8 @@
-import { Sidebar } from "./_components/sidebar"
+import { getMe } from "@/service/getMe"
 import { Header } from "./_components/header"
+import { Sidebar } from "./_components/sidebar"
+import AuthInitializer from "./_components/AuthInitializer"
+
 
 
 const DashboardLayout = async(
@@ -10,13 +13,18 @@ const DashboardLayout = async(
     }
 ) => {
 
+  const user = await getMe();
+
+  
 
   return ( 
     <div className="min-h-screen bg-gray-50">
+
+      <AuthInitializer user={user} />
       <Sidebar />
 
       {/* Header */}
-      <Header userName="James Miller" />
+      <Header/>
 
       {/* Main Content Area */}
       <main className="pt-24 pl-0 lg:pl-64 pr-4 pb-8 transition-all duration-300">

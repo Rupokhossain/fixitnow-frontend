@@ -2,7 +2,6 @@
 
 import { useState } from 'react'
 import { Sidebar } from './sidebar'
-import { Header } from './header'
 import { BookingsTable } from './bookings-table'
 import OverviewCards from './overview-card'
 
@@ -21,7 +20,7 @@ export default function Dashboard({ userRole = 'customer' }: DashboardProps) {
       <Sidebar />
 
       {/* Header */}
-      <Header userName="James Miller" />
+      {/* <Header userName="James Miller" /> */}
 
       {/* Main Content */}
       <main className="pt-24 pl-64 pr-8 pb-8 lg:pl-64 md:pl-0 ">
