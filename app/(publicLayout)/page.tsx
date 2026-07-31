@@ -1,12 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client"
 
-import HeroSection from '@/components/shared/hero-section'
-import ServiceCard from '@/components/shared/service-card'
-import { Button } from '@/components/ui/button'
-import { CheckCircle2, Clock, Shield, Loader2 } from 'lucide-react'
-import { useGetServicesQuery } from '../redux/api/baseApi'
-
+import HeroSection from "@/components/shared/hero-section"
+import ServiceCard from "@/components/shared/service-card"
+import { Button } from "@/components/ui/button"
+import { CheckCircle2, Clock, Shield, Loader2 } from "lucide-react"
+import { useGetServicesQuery } from "../redux/api/baseApi"
 
 // const services = [
 //   {
@@ -68,74 +67,62 @@ import { useGetServicesQuery } from '../redux/api/baseApi'
 const features = [
   {
     icon: CheckCircle2,
-    title: 'Verified Professionals',
-    description: 'All technicians are thoroughly vetted and insured',
+    title: "Verified Professionals",
+    description: "All technicians are thoroughly vetted and insured",
   },
   {
     icon: Clock,
-    title: 'Fast Scheduling',
-    description: 'Book services same-day or schedule for later',
+    title: "Fast Scheduling",
+    description: "Book services same-day or schedule for later",
   },
   {
     icon: Shield,
-    title: 'Guaranteed Satisfaction',
-    description: '100% satisfaction guarantee on all services',
+    title: "Guaranteed Satisfaction",
+    description: "100% satisfaction guarantee on all services",
   },
 ]
 
 export default function Page() {
-
   const { data, isLoading, isError } = useGetServicesQuery({})
-  const services = data?.data || [] 
-  
+  const services = data?.data || []
+
   return (
     <main className="bg-background">
       <HeroSection />
 
       {/* Services Grid Section */}
-      <section id="services" className="py-16 md:py-24 bg-background">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section id="services" className="bg-background py-16 md:py-24">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           {/* Section Header */}
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4 text-balance">
+          <div className="mb-12 text-center">
+            <h2 className="mb-4 text-3xl font-bold text-balance text-foreground md:text-4xl">
               Our Services
             </h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto text-balance">
+            <p className="mx-auto max-w-2xl text-lg text-balance text-muted-foreground">
               Browse through our wide range of professional home services
               provided by experienced and certified technicians.
             </p>
           </div>
 
           {/* Service Cards Grid */}
-          {/* <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-            {services.map((service) => (
-              <ServiceCard
-                key={service.id}
-                image={service.image}
-                serviceName={service.serviceName}
-                technicianName={service.technicianName}
-                rating={service.rating}
-                reviews={service.reviews}
-                startingPrice={service.startingPrice}
-              />
-            ))}
-          </div> */}
-                    {isLoading ? (
+
+          {isLoading ? (
             <div className="flex flex-col items-center justify-center py-20">
               <Loader2 className="h-10 w-10 animate-spin text-primary" />
-              <p className="mt-4 text-muted-foreground">Fetching latest services...</p>
+              <p className="mt-4 text-muted-foreground">
+                Fetching latest services...
+              </p>
             </div>
           ) : isError ? (
-            <div className="text-center py-20 text-red-500">
+            <div className="py-20 text-center text-red-500">
               Something went wrong while fetching services.
             </div>
           ) : (
-
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-2 md:gap-8 lg:grid-cols-3">
               {services.map((service: any) => (
                 <ServiceCard
-                  key={service._id || service.id}
-                  image={service.image || '/images/plumbing.png'} 
+                  key={service.id}
+                  image={service.image || "/images/plumbing.png"}
                   serviceName={service.name}
                   technicianName={service.provider?.name || "Verified Pro"}
                   rating={service.rating || 5.0}
@@ -145,31 +132,33 @@ export default function Page() {
               ))}
             </div>
           )}
-          
+
           {services.length === 0 && !isLoading && (
-            <p className="text-center text-muted-foreground">No services available right now.</p>
+            <p className="text-center text-muted-foreground">
+              No services available right now.
+            </p>
           )}
         </div>
       </section>
 
       {/* Features Section */}
-      <section className="py-16 md:py-24 bg-secondary">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
+      <section className="bg-secondary py-16 md:py-24">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="mb-12 text-center">
+            <h2 className="mb-4 text-3xl font-bold text-foreground md:text-4xl">
               Why Choose FixItNow?
             </h2>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
             {features.map((feature, index) => {
               const Icon = feature.icon
               return (
                 <div key={index} className="text-center">
-                  <div className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-primary/10 mb-4">
-                    <Icon className="w-7 h-7 text-primary" />
+                  <div className="mb-4 inline-flex h-14 w-14 items-center justify-center rounded-full bg-primary/10">
+                    <Icon className="h-7 w-7 text-primary" />
                   </div>
-                  <h3 className="text-xl font-bold text-foreground mb-2">
+                  <h3 className="mb-2 text-xl font-bold text-foreground">
                     {feature.title}
                   </h3>
                   <p className="text-muted-foreground">{feature.description}</p>
@@ -181,24 +170,22 @@ export default function Page() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-16 md:py-24 bg-primary text-white">
-        <div className="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4 text-balance">
+      <section className="bg-primary py-16 text-white md:py-24">
+        <div className="mx-auto max-w-4xl px-4 text-center sm:px-6 lg:px-8">
+          <h2 className="mb-4 text-3xl font-bold text-balance md:text-4xl">
             Ready to Get Started?
           </h2>
-          <p className="text-lg text-white/90 mb-8 max-w-2xl mx-auto text-balance">
-            Join thousands of satisfied homeowners who trust FixItNow for
-            their home service needs.
+          <p className="mx-auto mb-8 max-w-2xl text-lg text-balance text-white/90">
+            Join thousands of satisfied homeowners who trust FixItNow for their
+            home service needs.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button
-              className="bg-white text-primary hover:bg-gray-100 px-8 py-3 font-semibold"
-            >
+          <div className="flex flex-col justify-center gap-4 sm:flex-row">
+            <Button className="bg-white px-8 py-3 font-semibold text-primary hover:bg-gray-100">
               Browse Services
             </Button>
             <Button
               variant="outline"
-              className="bg-white text-primary hover:bg-gray-100 px-8 py-3 font-semibold"
+              className="bg-white px-8 py-3 font-semibold text-primary hover:bg-gray-100"
             >
               Learn More
             </Button>
@@ -207,14 +194,14 @@ export default function Page() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-foreground text-white py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+      <footer className="bg-foreground py-12 text-white">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="mb-8 grid grid-cols-1 gap-8 md:grid-cols-4">
             <div>
-              <div className="flex items-center space-x-2 mb-4">
-                <div className="bg-secondary rounded-lg p-2">
+              <div className="mb-4 flex items-center space-x-2">
+                <div className="rounded-lg bg-secondary p-2">
                   <svg
-                    className="w-5 h-5 text-foreground"
+                    className="h-5 w-5 text-foreground"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -234,67 +221,67 @@ export default function Page() {
               </p>
             </div>
             <div>
-              <h4 className="font-bold mb-4">Services</h4>
-              <ul className="space-y-2 text-white/60 text-sm">
+              <h4 className="mb-4 font-bold">Services</h4>
+              <ul className="space-y-2 text-sm text-white/60">
                 <li>
-                  <a href="#" className="hover:text-white transition-colors">
+                  <a href="#" className="transition-colors hover:text-white">
                     Plumbing
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="hover:text-white transition-colors">
+                  <a href="#" className="transition-colors hover:text-white">
                     Electrical
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="hover:text-white transition-colors">
+                  <a href="#" className="transition-colors hover:text-white">
                     HVAC
                   </a>
                 </li>
               </ul>
             </div>
             <div>
-              <h4 className="font-bold mb-4">Company</h4>
-              <ul className="space-y-2 text-white/60 text-sm">
+              <h4 className="mb-4 font-bold">Company</h4>
+              <ul className="space-y-2 text-sm text-white/60">
                 <li>
-                  <a href="#" className="hover:text-white transition-colors">
+                  <a href="#" className="transition-colors hover:text-white">
                     About Us
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="hover:text-white transition-colors">
+                  <a href="#" className="transition-colors hover:text-white">
                     Contact
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="hover:text-white transition-colors">
+                  <a href="#" className="transition-colors hover:text-white">
                     Privacy Policy
                   </a>
                 </li>
               </ul>
             </div>
             <div>
-              <h4 className="font-bold mb-4">Support</h4>
-              <ul className="space-y-2 text-white/60 text-sm">
+              <h4 className="mb-4 font-bold">Support</h4>
+              <ul className="space-y-2 text-sm text-white/60">
                 <li>
-                  <a href="#" className="hover:text-white transition-colors">
+                  <a href="#" className="transition-colors hover:text-white">
                     Help Center
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="hover:text-white transition-colors">
+                  <a href="#" className="transition-colors hover:text-white">
                     FAQ
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="hover:text-white transition-colors">
+                  <a href="#" className="transition-colors hover:text-white">
                     Terms of Service
                   </a>
                 </li>
               </ul>
             </div>
           </div>
-          <div className="border-t border-white/20 pt-8 text-center text-white/60 text-sm">
+          <div className="border-t border-white/20 pt-8 text-center text-sm text-white/60">
             <p>&copy; 2026 FixItNow. All rights reserved.</p>
           </div>
         </div>

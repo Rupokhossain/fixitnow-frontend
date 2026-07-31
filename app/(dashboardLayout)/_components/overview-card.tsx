@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client'
 
 import { Card, CardContent } from '@/components/ui/card'
@@ -5,15 +6,18 @@ import {
   CheckCircle2,
   Zap,
   DollarSign,
-  TrendingUp,
+  Users,
 } from 'lucide-react'
 
-interface OverviewCard {
-  title: string
-  value: string | number
-  icon: React.ComponentType<{ className?: string }>
-  subtext?: string
-  color: 'blue' | 'green' | 'orange' | 'purple'
+
+
+interface StatsProps {
+  stats: {
+    totalUsers: number;
+    totalBookings: number;
+    totalRevenue: number;
+    activeTechnicians: number;
+  }
 }
 
 const colorClasses = {
@@ -23,34 +27,34 @@ const colorClasses = {
   purple: 'bg-purple-50 text-purple-600',
 }
 
-export default function OverviewCards() {
-  const cards: OverviewCard[] = [
+
+
+export default function OverviewCards({ stats }: StatsProps) {
+
+
+   const cards = [
     {
-      title: 'Total Bookings',
-      value: '24',
-      icon: CheckCircle2,
-      subtext: '+4 this month',
+      title: 'Total Users',
+      value: stats?.totalUsers,
+      icon: Users,
       color: 'blue',
     },
     {
-      title: 'Active Jobs',
-      value: '3',
-      icon: Zap,
-      subtext: 'In progress',
+      title: 'Total Bookings',
+      value: stats?.totalBookings,
+      icon: CheckCircle2,
       color: 'green',
     },
     {
-      title: 'Pending Payments',
-      value: '$1,240',
+      title: 'Platform Revenue',
+      value: `$${stats?.totalRevenue}`,
       icon: DollarSign,
-      subtext: '2 invoices',
       color: 'orange',
     },
     {
-      title: 'Success Rate',
-      value: '98%',
-      icon: TrendingUp,
-      subtext: 'Last 30 days',
+      title: 'Total Technicians',
+      value: stats?.activeTechnicians,
+      icon: Zap,
       color: 'purple',
     },
   ]
@@ -70,9 +74,9 @@ export default function OverviewCards() {
                   <p className="text-3xl font-bold text-gray-900 mt-2">
                     {card.value}
                   </p>
-                  <p className="text-xs text-gray-500 mt-1">{card.subtext}</p>
+                  {/* <p className="text-xs text-gray-500 mt-1">{card.subtext}</p> */}
                 </div>
-                <div className={`p-3 rounded-lg ${colorClasses[card.color]}`}>
+                <div className={`p-3 rounded-lg ${(colorClasses as any)[card.color]}`}>
                   <Icon className="h-6 w-6" />
                 </div>
               </div>

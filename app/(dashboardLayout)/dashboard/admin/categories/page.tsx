@@ -19,18 +19,18 @@ export default function CategoryManagement() {
   const [searchTerm, setSearchTerm] = useState("")
   const [isDialogOpen, setIsDialogOpen] = useState(false)
 
-  // ১. এপিআই হুকস
+
   const { data, isLoading } = useGetCategoriesQuery({})
   const [addCategory, { isLoading: isAdding }] = useAddCategoryMutation()
 
   const categories = data?.data || []
 
-  // ২. ফর্ম সেটআপ
+
   const { register, handleSubmit, reset, formState: { errors } } = useForm<CategoryFormValues>({
     resolver: zodResolver(categorySchema),
   })
 
-  // ৩. সাবমিট হ্যান্ডেলার
+
   const onSubmit = async (formData: CategoryFormValues) => {
     try {
       await addCategory(formData).unwrap()
@@ -42,7 +42,6 @@ export default function CategoryManagement() {
     }
   }
 
-  // ৪. ফিল্টার লজিক
   const filteredCategories = categories.filter((cat: any) =>
     cat.name.toLowerCase().includes(searchTerm.toLowerCase())
   )
