@@ -27,6 +27,7 @@ const technicianApi = baseApi.injectEndpoints({
   query: (id) => `/technician/${id}`, 
   providesTags: ["Users"],
 }),
+
   }),
 });
 

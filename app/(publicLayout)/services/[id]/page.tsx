@@ -1,57 +1,77 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client"
 
-import { useState } from 'react'
-import { useParams, useRouter } from 'next/navigation'
-import { Calendar } from '@/components/ui/calendar'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Avatar, AvatarFallback } from '@/components/ui/avatar'
-import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
-import { Star, Clock, MapPin, Loader2, ArrowLeft, Briefcase, Lock } from 'lucide-react'
+import { useState } from "react"
+import { useParams, useRouter } from "next/navigation"
+import { Calendar } from "@/components/ui/calendar"
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
+import { Avatar, AvatarFallback } from "@/components/ui/avatar"
+import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
+import {
+  Star,
+  Clock,
+  MapPin,
+  Loader2,
+  ArrowLeft,
+  Briefcase,
+  Lock,
+} from "lucide-react"
 import { toast } from "sonner"
-import Link from 'next/link'
-import Image from 'next/image'
-import { useSelector } from 'react-redux'
-import { RootState } from '@/app/redux/store'
+import Link from "next/link"
+import Image from "next/image"
+import { useSelector } from "react-redux"
+import { RootState } from "@/app/redux/store"
 
 import { useCreateBookingMutation } from "@/app/redux/api/bookingApi"
-import { useGetServicesQuery } from '@/app/redux/api/baseApi'
+import { useGetServicesQuery } from "@/app/redux/api/baseApi"
 
 // --- TypeScript Interfaces ---
 interface ICategory {
-  id: string;
-  name: string;
+  id: string
+  name: string
 }
 
 interface ITechnicianProfile {
-  bio?: string;
-  skills?: string;
-  experience?: string;
-  location?: string;
-  pricing?: number;
+  bio?: string
+  skills?: string
+  experience?: string
+  location?: string
+  pricing?: number
 }
 
 interface ITechnician {
-  id: string;
-  name: string;
-  email: string;
-  technicianProfile?: ITechnicianProfile | null;
+  id: string
+  name: string
+  email: string
+  technicianProfile?: ITechnicianProfile | null
 }
 
 interface IService {
-  id: string;
-  name: string;
-  description: string;
-  price: number;
-  image?: string;
-  category?: ICategory;
-  technician?: ITechnician;
+  id: string
+  name: string
+  description: string
+  price: number
+  image?: string
+  category?: ICategory
+  technician?: ITechnician
 }
 
 const timeSlots = [
-  '09:00 AM', '10:00 AM', '11:00 AM', '12:00 PM', 
-  '02:00 PM', '03:00 PM', '04:00 PM', '05:00 PM'
+  "09:00 AM",
+  "10:00 AM",
+  "11:00 AM",
+  "12:00 PM",
+  "02:00 PM",
+  "03:00 PM",
+  "04:00 PM",
+  "05:00 PM",
 ]
 
 export default function ServiceDetailsPage() {
@@ -66,127 +86,180 @@ export default function ServiceDetailsPage() {
   const [selectedTime, setSelectedTime] = useState<string | null>(null)
 
   // ২. এপিআই হুকস
-  const { data: servicesData, isLoading: isServicesLoading } = useGetServicesQuery({})
-  const [createBooking, { isLoading: isBookingLoading }] = useCreateBookingMutation()
+  const { data: servicesData, isLoading: isServicesLoading } =
+    useGetServicesQuery({})
+  const [createBooking, { isLoading: isBookingLoading }] =
+    useCreateBookingMutation()
 
   // নির্দিষ্ট সার্ভিস খুঁজে বের করা
-  const service = servicesData?.data?.find((s: IService) => s.id === serviceId) as IService | undefined
+  const service = servicesData?.data?.find(
+    (s: IService) => s.id === serviceId
+  ) as IService | undefined
 
   // ৩. বুকিং সাবমিট লজিক
-  const handleBookNow = async () => {
-    if (!user) {
-      toast.error("Please login to book a service")
-      router.push(`/auth/login?redirectTo=/services/${serviceId}`)
-      return
-    }
-
-    if (!selectedDate || !selectedTime) {
-      toast.error("Please select both date and time")
-      return
-    }
-
-    const bookingData = {
-      serviceId: serviceId,
-      slotDate: selectedDate.toISOString(),
-      slotTime: selectedTime,
-    }
-
-    try {
-      await createBooking(bookingData).unwrap()
-      toast.success("Booking request sent successfully!")
-      router.push("/dashboard/customer/bookings")
-    } catch (err: any) {
-      toast.error(err?.data?.message || "Booking failed. Please try again.")
-    }
+const handleBookNow = async () => {
+  if (!user) {
+    toast.error("Please login to book a service")
+    router.push(`/auth/login?redirectTo=/services/${serviceId}`)
+    return
   }
 
-  if (isServicesLoading) return <div className="flex h-screen items-center justify-center"><Loader2 className="animate-spin h-10 w-10 text-primary" /></div>
+  if (!selectedDate || !selectedTime) {
+    toast.error("Please select both date and time")
+    return
+  }
 
-  if (!service) return (
-    <div className="text-center py-20">
-      <h2 className="text-2xl font-bold text-gray-900">Service not found!</h2>
-      <Link href="/services" className="text-blue-600 underline mt-4 block">Go back to services</Link>
-    </div>
-  )
+  // ১. তারিখ ফরম্যাট করো: YYYY-MM-DD (ব্যাকএন্ডের জন্য)
+  const year = selectedDate.getFullYear();
+  const month = String(selectedDate.getMonth() + 1).padStart(2, '0');
+  const day = String(selectedDate.getDate()).padStart(2, '0');
+  const formattedDate = `${year}-${month}-${day}`;
+
+  // ২. প্লেওড তৈরি (ঠিক যেভাবে তোমার ব্যাকএন্ডের IBookingRequest চাচ্ছে)
+  const bookingData = {
+    serviceId: serviceId, // এপিআই থেকে আসা আইডি
+    date: formattedDate,  // স্ট্রিং ফরম্যাট "2026-08-10"
+    time: selectedTime,   // স্ট্রিং ফরম্যাট "10:00 AM"
+  };
+
+  console.log("Sending Final Payload:", bookingData);
+
+  try {
+    // ৩. রিকোয়েস্ট পাঠানো
+    await createBooking(bookingData).unwrap();
+    toast.success("Booking requested successfully!");
+    
+    // ৪. সফল হলে ড্যাশবোর্ডের বুকিং লিস্টে নিয়ে যাও
+    router.push("/dashboard/customer/bookings");
+  } catch (err: any) {
+    console.error("Booking Error:", err);
+    toast.error(err?.data?.message || "Invalid Date or Time format!");
+  }
+};
+
+  if (isServicesLoading)
+    return (
+      <div className="flex h-screen items-center justify-center">
+        <Loader2 className="h-10 w-10 animate-spin text-primary" />
+      </div>
+    )
+
+  if (!service)
+    return (
+      <div className="py-20 text-center">
+        <h2 className="text-2xl font-bold text-gray-900">Service not found!</h2>
+        <Link href="/services" className="mt-4 block text-blue-600 underline">
+          Go back to services
+        </Link>
+      </div>
+    )
 
   return (
     <div className="min-h-screen bg-gray-50 pb-20 font-sans">
       {/* Top Header */}
-      <div className="bg-white border-b sticky top-16 z-30 shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 h-14 flex items-center">
-          <Link href="/services" className="flex items-center gap-2 text-sm font-semibold text-gray-600 hover:text-primary transition-colors">
+      <div className="sticky top-16 z-30 border-b bg-white shadow-sm">
+        <div className="mx-auto flex h-14 max-w-7xl items-center px-4">
+          <Link
+            href="/services"
+            className="flex items-center gap-2 text-sm font-semibold text-gray-600 transition-colors hover:text-primary"
+          >
             <ArrowLeft size={16} /> Back to Listings
           </Link>
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          
+      <div className="mx-auto mt-8 max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
           {/* Main Info Column */}
-          <div className="lg:col-span-2 space-y-6">
-            <Card className="overflow-hidden border-0 shadow-sm bg-white rounded-2xl">
-              <div className="h-80 bg-gray-200 relative">
-                <Image 
-                  src={service.image || "https://images.unsplash.com/photo-1621905251189-08b45d6a269e?q=80&w=2071"} 
-                  alt={service.name} 
+          <div className="space-y-6 lg:col-span-2">
+            <Card className="overflow-hidden rounded-2xl border-0 bg-white shadow-sm">
+              <div className="relative h-80 bg-gray-200">
+                <Image
+                  src={
+                    service.image ||
+                    "https://images.unsplash.com/photo-1621905251189-08b45d6a269e?q=80&w=2071"
+                  }
+                  alt={service.name}
                   fill
                   className="object-cover"
                 />
-                <Badge className="absolute top-6 left-6 bg-primary text-white px-4 py-1.5 text-xs font-black uppercase">
+                <Badge className="absolute top-6 left-6 bg-primary px-4 py-1.5 text-xs font-black text-white uppercase">
                   {service.category?.name || "Premium Service"}
                 </Badge>
               </div>
               <CardContent className="p-8">
-                <div className="flex justify-between items-start flex-wrap gap-4">
+                <div className="flex flex-wrap items-start justify-between gap-4">
                   <div className="flex-1">
-                    <h1 className="text-4xl font-black text-gray-900 leading-tight">{service.name}</h1>
-                    <div className="flex items-center gap-6 mt-4 text-gray-500">
-                      <div className="flex items-center gap-1 text-amber-500 font-black">
+                    <h1 className="text-4xl leading-tight font-black text-gray-900">
+                      {service.name}
+                    </h1>
+                    <div className="mt-4 flex items-center gap-6 text-gray-500">
+                      <div className="flex items-center gap-1 font-black text-amber-500">
                         <Star size={20} fill="currentColor" /> 5.0 (Vetted)
                       </div>
                       <div className="flex items-center gap-2 font-medium">
-                        <MapPin size={20} className="text-primary" /> {service.technician?.technicianProfile?.location || "Dhaka, BD"}
+                        <MapPin size={20} className="text-primary" />{" "}
+                        {service.technician?.technicianProfile?.location ||
+                          "Dhaka, BD"}
                       </div>
                     </div>
                   </div>
                 </div>
 
-                <div className="mt-8 pt-8 border-t border-gray-100">
-                  <h3 className="text-xl font-bold text-gray-900 mb-4">Service Description</h3>
-                  <p className="text-gray-600 leading-relaxed text-lg whitespace-pre-line">{service.description}</p>
+                <div className="mt-8 border-t border-gray-100 pt-8">
+                  <h3 className="mb-4 text-xl font-bold text-gray-900">
+                    Service Description
+                  </h3>
+                  <p className="text-lg leading-relaxed whitespace-pre-line text-gray-600">
+                    {service.description}
+                  </p>
                 </div>
               </CardContent>
             </Card>
 
             {/* Provider Section */}
-            <Card className="border-0 shadow-sm rounded-2xl overflow-hidden bg-white">
-              <CardHeader className="border-b bg-gray-50/50 py-4 px-8">
-                <CardTitle className="text-base font-bold text-gray-700">Expert Information</CardTitle>
+            <Card className="overflow-hidden rounded-2xl border-0 bg-white shadow-sm">
+              <CardHeader className="border-b bg-gray-50/50 px-8 py-4">
+                <CardTitle className="text-base font-bold text-gray-700">
+                  Expert Information
+                </CardTitle>
               </CardHeader>
               <CardContent className="p-8">
-                <div className="flex flex-col sm:flex-row items-center sm:items-start gap-8">
-                  <Avatar className="h-28 w-28 ring-4 ring-white shadow-xl">
-                    <AvatarFallback className="bg-primary text-white text-3xl font-black">
+                <div className="flex flex-col items-center gap-8 sm:flex-row sm:items-start">
+                  <Avatar className="h-28 w-28 shadow-xl ring-4 ring-white">
+                    <AvatarFallback className="bg-primary text-3xl font-black text-white">
                       {service.technician?.name?.charAt(0)}
                     </AvatarFallback>
                   </Avatar>
                   <div className="flex-1 text-center sm:text-left">
-                    <h3 className="text-2xl font-black text-gray-900">{service.technician?.name}</h3>
-                    <p className="text-primary font-bold mt-1 flex items-center justify-center sm:justify-start gap-2">
-                      <Briefcase size={16} /> 
-                      {service.technician?.technicianProfile?.experience || "Experienced"} Professional
+                    <h3 className="text-2xl font-black text-gray-900">
+                      {service.technician?.name}
+                    </h3>
+                    <p className="mt-1 flex items-center justify-center gap-2 font-bold text-primary sm:justify-start">
+                      <Briefcase size={16} />
+                      {service.technician?.technicianProfile?.experience ||
+                        "Experienced"}{" "}
+                      Professional
                     </p>
-                    <p className="mt-4 text-gray-600 leading-relaxed italic text-base">
-                      &quot;{service.technician?.technicianProfile?.bio || "Committed to delivering high-quality home service solutions with a focus on reliability and customer satisfaction."}&quot;
+                    <p className="mt-4 text-base leading-relaxed text-gray-600 italic">
+                      &quot;
+                      {service.technician?.technicianProfile?.bio ||
+                        "Committed to delivering high-quality home service solutions with a focus on reliability and customer satisfaction."}
+                      &quot;
                     </p>
-                    
-                    <div className="mt-6 flex flex-wrap gap-2 justify-center sm:justify-start">
-                      {service.technician?.technicianProfile?.skills?.split(',').map((skill: string) => (
-                        <Badge key={skill} variant="secondary" className="bg-blue-50 text-blue-700 border-blue-100 px-4 py-1 font-bold">
-                          {skill.trim()}
-                        </Badge>
-                      ))}
+
+                    <div className="mt-6 flex flex-wrap justify-center gap-2 sm:justify-start">
+                      {service.technician?.technicianProfile?.skills
+                        ?.split(",")
+                        .map((skill: string) => (
+                          <Badge
+                            key={skill}
+                            variant="secondary"
+                            className="border-blue-100 bg-blue-50 px-4 py-1 font-bold text-blue-700"
+                          >
+                            {skill.trim()}
+                          </Badge>
+                        ))}
                     </div>
                   </div>
                 </div>
@@ -196,25 +269,30 @@ export default function ServiceDetailsPage() {
 
           {/* Booking Sidebar - The Dynamic Logic */}
           <div className="lg:col-span-1">
-            <Card className="sticky top-32 shadow-2xl border-0 overflow-hidden rounded-3xl">
-              <CardHeader className="bg-gray-900 text-white p-6">
-                <CardTitle className="text-xl font-bold">Secure Your Slot</CardTitle>
-                <CardDescription className="text-gray-400">Choose date & time</CardDescription>
+            <Card className="sticky top-32 overflow-hidden rounded-3xl border-0 shadow-2xl">
+              <CardHeader className="bg-gray-900 p-6 text-white">
+                <CardTitle className="text-xl font-bold">
+                  Secure Your Slot
+                </CardTitle>
+                <CardDescription className="text-gray-400">
+                  Choose date & time
+                </CardDescription>
               </CardHeader>
-              <CardContent className="p-6 space-y-6 bg-white">
-                
-                <div className="border rounded-2xl p-2 bg-gray-50 flex justify-center shadow-inner">
+              <CardContent className="space-y-6 bg-white p-6">
+                <div className="flex justify-center rounded-2xl border bg-gray-50 p-2 shadow-inner">
                   <Calendar
                     mode="single"
                     selected={selectedDate}
                     onSelect={setSelectedDate}
                     className="rounded-md"
-                    disabled={(date) => date < new Date(new Date().setHours(0,0,0,0))}
+                    disabled={(date) =>
+                      date < new Date(new Date().setHours(0, 0, 0, 0))
+                    }
                   />
                 </div>
 
                 <div className="space-y-4">
-                  <p className="text-sm font-black text-gray-700 flex items-center gap-2">
+                  <p className="flex items-center gap-2 text-sm font-black text-gray-700">
                     <Clock size={18} className="text-primary" /> Select Time
                   </p>
                   <div className="grid grid-cols-2 gap-2">
@@ -222,7 +300,7 @@ export default function ServiceDetailsPage() {
                       <Button
                         key={time}
                         variant={selectedTime === time ? "default" : "outline"}
-                        className={`h-11 font-bold transition-all rounded-xl ${selectedTime === time ? 'bg-primary shadow-lg ring-2 ring-primary ring-offset-1' : 'hover:border-primary hover:text-primary'}`}
+                        className={`h-11 rounded-xl font-bold transition-all ${selectedTime === time ? "bg-primary shadow-lg ring-2 ring-primary ring-offset-1" : "hover:border-primary hover:text-primary"}`}
                         onClick={() => setSelectedTime(time)}
                       >
                         {time}
@@ -231,48 +309,61 @@ export default function ServiceDetailsPage() {
                   </div>
                 </div>
 
-                <div className="pt-6 border-t border-gray-100">
-                   {/* --- ROLE BASED RENDERING --- */}
-                   {user && (user.role === 'TECHNICIAN' || user.role === 'ADMIN') ? (
-                     /* ১. টেকনিশিয়ান বা অ্যাডমিন হলে রেস্ট্রিকশন দেখাবে */
-                     <div className="bg-amber-50 p-6 rounded-2xl border-2 border-dashed border-amber-200 text-center animate-in fade-in slide-in-from-bottom-2 duration-500">
-                        <div className="flex justify-center mb-3">
-                           <Lock className="text-amber-600 h-8 w-8" />
-                        </div>
-                        <p className="text-sm text-amber-900 font-black uppercase tracking-tight">
-                          Restricted Access
-                        </p>
-                        <p className="text-[11px] text-amber-700 mt-2 font-bold leading-relaxed">
-                          You are logged in as {user.role}. <br/> Only Customer accounts can reserve services.
-                        </p>
-                     </div>
-                   ) : (
-                     /* ২. গেস্ট বা কাস্টমার হলে প্রাইস এবং বাটন দেখাবে */
-                     <>
-                        <div className="flex justify-between items-center mb-6 px-1">
-                          <span className="text-gray-500 font-bold">Total Service Fee:</span>
-                          <span className="text-3xl font-black text-gray-900">${service.price}</span>
-                        </div>
+                <div className="border-t border-gray-100 pt-6">
+                  {/* --- ROLE BASED RENDERING --- */}
+                  {user &&
+                  (user.role === "TECHNICIAN" || user.role === "ADMIN") ? (
+                    /* ১. টেকনিশিয়ান বা অ্যাডমিন হলে রেস্ট্রিকশন দেখাবে */
+                    <div className="animate-in rounded-2xl border-2 border-dashed border-amber-200 bg-amber-50 p-6 text-center duration-500 fade-in slide-in-from-bottom-2">
+                      <div className="mb-3 flex justify-center">
+                        <Lock className="h-8 w-8 text-amber-600" />
+                      </div>
+                      <p className="text-sm font-black tracking-tight text-amber-900 uppercase">
+                        Restricted Access
+                      </p>
+                      <p className="mt-2 text-[11px] leading-relaxed font-bold text-amber-700">
+                        You are logged in as {user.role}. <br /> Only Customer
+                        accounts can reserve services.
+                      </p>
+                    </div>
+                  ) : (
+                    /* ২. গেস্ট বা কাস্টমার হলে প্রাইস এবং বাটন দেখাবে */
+                    <>
+                      <div className="mb-6 flex items-center justify-between px-1">
+                        <span className="font-bold text-gray-500">
+                          Total Service Fee:
+                        </span>
+                        <span className="text-3xl font-black text-gray-900">
+                          ${service.price}
+                        </span>
+                      </div>
 
-                        {!user ? (
-                          /* যদি লগইন না থাকে - লগইন বাটন */
-                          <Link href={`/auth/login?redirectTo=/services/${serviceId}`} className="w-full">
-                            <Button className="w-full h-14 text-lg font-black shadow-xl bg-gray-900 hover:bg-black rounded-2xl transition-all">
-                              Login to Book
-                            </Button>
-                          </Link>
-                        ) : (
-                          /* যদি কাস্টমার হয় - বুকিং বাটন */
-                          <Button 
-                            className="w-full h-14 text-lg font-black shadow-xl bg-primary hover:bg-primary/90 rounded-2xl transition-all active:scale-95" 
-                            onClick={handleBookNow}
-                            disabled={isBookingLoading}
-                          >
-                            {isBookingLoading ? <Loader2 className="animate-spin mr-2" /> : "Confirm Reservation"}
+                      {!user ? (
+                        /* যদি লগইন না থাকে - লগইন বাটন */
+                        <Link
+                          href={`/auth/login?redirectTo=/services/${serviceId}`}
+                          className="w-full"
+                        >
+                          <Button className="h-14 w-full rounded-2xl bg-gray-900 text-lg font-black shadow-xl transition-all hover:bg-black">
+                            Login to Book
                           </Button>
-                        )}
-                     </>
-                   )}
+                        </Link>
+                      ) : (
+                        /* যদি কাস্টমার হয় - বুকিং বাটন */
+                        <Button
+                          className="h-14 w-full rounded-2xl bg-primary text-lg font-black shadow-xl transition-all hover:bg-primary/90 active:scale-95"
+                          onClick={handleBookNow}
+                          disabled={isBookingLoading}
+                        >
+                          {isBookingLoading ? (
+                            <Loader2 className="mr-2 animate-spin" />
+                          ) : (
+                            "Confirm Reservation"
+                          )}
+                        </Button>
+                      )}
+                    </>
+                  )}
                 </div>
               </CardContent>
             </Card>

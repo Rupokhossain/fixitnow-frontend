@@ -18,7 +18,6 @@ export interface IUser {
 }
 
 export interface IBooking {
-  _id: string;
   id?: string;
   service?: { name: string; price: number };
   customer?: { name: string; email: string };
@@ -27,6 +26,7 @@ export interface IBooking {
   slotTime: string;
   status: 'REQUESTED' | 'ACCEPTED' | 'PAID' | 'IN_PROGRESS' | 'COMPLETED' | 'DECLINED';
   price?: number;
+  scheduledAt?: string;
 }
 
 export interface IAvailability {

@@ -1,288 +1,128 @@
-'use client'
+"use client"
 
-import { useState } from 'react'
-
-import { Calendar } from '@/components/ui/calendar'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { Badge } from '@/components/ui/badge'
+import { useState, useMemo } from 'react'
+import { useGetServicesQuery } from '@/app/redux/api/baseApi'
+import ServiceCard from '@/components/shared/service-card'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { Checkbox } from '@/components/ui/checkbox'
+import { Search, Filter, Loader2, SlidersHorizontal } from 'lucide-react'
+import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { CheckCircle2, Star } from 'lucide-react'
 
-const timeSlots = [
-  '10:00 AM',
-  '10:30 AM',
-  '11:00 AM',
-  '11:30 AM',
-  '12:00 PM',
-  '01:00 PM',
-  '01:30 PM',
-  '02:00 PM',
-  '02:30 PM',
-  '03:00 PM',
-  '03:30 PM',
-  '04:00 PM',
-]
-
-const reviews = [
-  {
-    id: 1,
-    name: 'Sarah Johnson',
-    rating: 5,
-    text: 'Excellent service! Fixed our HVAC system in record time. Professional and courteous.',
-  },
-  {
-    id: 2,
-    name: 'Mike Chen',
-    rating: 5,
-    text: 'Very knowledgeable. Diagnosed and repaired the electrical issue with great detail. Highly recommend!',
-  },
-  {
-    id: 3,
-    name: 'Emily Rodriguez',
-    rating: 4,
-    text: 'Great communication and thorough work. Would definitely use again.',
-  },
-]
-
-const skills = [
-  'HVAC Installation & Repair',
-  'Electrical Wiring',
-  'Plumbing',
-  'Water Heater Service',
-  'Gas Fitting',
-  'Preventive Maintenance',
-]
-
-function StarRating({ rating, count }: { rating: number; count?: number }) {
-  return (
-    <div className="flex items-center gap-1">
-      {[...Array(5)].map((_, i) => (
-        <Star
-          key={i}
-          size={16}
-          className={i < rating ? 'fill-amber-400 text-amber-400' : 'text-muted-foreground'}
-        />
-      ))}
-      {count && <span className="ml-1 text-sm text-muted-foreground">({count})</span>}
-    </div>
-  )
+// --- টাইপ ডিফিনিশন ---
+interface IService {
+  id: string;
+  name: string;
+  description: string;
+  price: number;
+  image?: string;
+  category?: { name: string };
+  technician?: { name: string };
 }
 
-export default function ServicePage() {
-  const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date())
-  const [selectedTime, setSelectedTime] = useState<string | null>(null)
-  const [isBoking, setIsBooking] = useState(false)
+export default function AllServicesPage() {
+  const [searchTerm, setSearchTerm] = useState("")
+  const [selectedCategory, setSelectedCategory] = useState<string[]>([])
 
-  const handleBookNow = () => {
-    if (!selectedDate || !selectedTime) {
-      alert('Please select both date and time')
-      return
-    }
-    setIsBooking(true)
-    setTimeout(() => {
-      alert(
-        `Booking confirmed for ${selectedDate.toLocaleDateString()} at ${selectedTime}!`
-      )
-      setIsBooking(false)
-    }, 500)
+  // ১. এপিআই থেকে সব ডাটা নিয়ে আসা
+  const { data, isLoading } = useGetServicesQuery({})
+  const allServices = data?.data || [];
+
+  // ২. ফ্রন্টএন্ড ফিল্টারিং লজিক (Search & Category)
+  const filteredServices = useMemo(() => {
+    return allServices.filter((service: IService) => {
+      const matchesSearch = service.name.toLowerCase().includes(searchTerm.toLowerCase())
+      const matchesCategory = selectedCategory.length === 0 || 
+                              selectedCategory.includes(service.category?.name || "")
+      return matchesSearch && matchesCategory
+    })
+  }, [allServices, searchTerm, selectedCategory])
+
+  const categories = ["Plumbing", "Electrical", "Cleaning", "Painting", "HVAC"]
+
+  const handleCategoryChange = (cat: string) => {
+    setSelectedCategory(prev => 
+      prev.includes(cat) ? prev.filter(c => c !== cat) : [...prev, cat]
+    )
   }
 
-  const averageRating = Math.round(
-    reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length
-  )
+  if (isLoading) return <div className="flex h-screen items-center justify-center"><Loader2 className="animate-spin h-10 w-10 text-primary" /></div>
 
   return (
-    <div className="min-h-screen bg-background">
-      {/* Header */}
-      <div className="border-b bg-card py-6">
-        <div className="mx-auto max-w-7xl px-4">
-          <h1 className="text-3xl font-bold text-foreground">Expert Home Services</h1>
-          <p className="mt-1 text-muted-foreground">FixItNow - Professional Technician Services</p>
+    <div className="min-h-screen bg-gray-50 py-10">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        {/* হেডার এবং সার্চ বার */}
+        <div className="mb-10 text-center">
+          <h1 className="text-4xl font-black text-gray-900 mb-4">Explore Professional Services</h1>
+          <div className="max-w-2xl mx-auto relative">
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
+            <Input 
+              placeholder="Search for any service (e.g. AC Repair)..." 
+              className="pl-12 h-14 text-lg shadow-sm border-0 rounded-2xl"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+          </div>
         </div>
-      </div>
 
-      {/* Main Content */}
-      <div className="mx-auto max-w-7xl px-4 py-12">
-        <div className="grid gap-8 lg:grid-cols-3">
-          {/* Left Column - Technician Profile */}
-          <div className="lg:col-span-2 space-y-6">
-            {/* Profile Card */}
-            <Card className="overflow-hidden border-0 shadow-lg">
-              <CardContent className="p-8">
-                <div className="flex flex-col sm:flex-row gap-6 items-start">
-                  {/* Avatar */}
-                  <Avatar className="size-24 ring-2 ring-primary/20">
-                    <AvatarImage src="/images/technician-avatar.png" alt="James Miller" />
-                    <AvatarFallback>JM</AvatarFallback>
-                  </Avatar>
+        <div className="flex flex-col lg:row gap-8 lg:flex-row">
+          
+          {/* বাম পাশ: ফিল্টার সাইডবার */}
+          <aside className="w-full lg:w-64 space-y-6">
+            <Card className="border-0 shadow-sm rounded-2xl">
+              <CardContent className="p-6">
+                <div className="flex items-center gap-2 mb-6 font-bold text-gray-900 border-b pb-4">
+                  <SlidersHorizontal size={18} /> Filters
+                </div>
 
-                  {/* Info */}
-                  <div className="flex-1">
-                    <div className="flex items-center gap-3 flex-wrap">
-                      <h2 className="text-2xl font-bold text-foreground">James Miller</h2>
-                      <Badge variant="secondary" className="flex items-center gap-1">
-                        <CheckCircle2 size={14} />
-                        Verified
-                      </Badge>
-                    </div>
-
-                    <div className="mt-2 flex items-center gap-3">
-                      <StarRating rating={averageRating} count={reviews.length} />
-                    </div>
-
-                    <p className="mt-4 text-base text-muted-foreground leading-relaxed">
-                      With over 15 years of experience in residential and commercial services, I&apos;m
-                      dedicated to providing reliable, efficient, and high-quality solutions. I take pride
-                      in clear communication, transparent pricing, and leaving customers completely satisfied.
-                    </p>
-
-                    {/* Experience Stats */}
-                    <div className="mt-6 grid grid-cols-3 gap-4">
-                      <div className="border-l-2 border-primary pl-3">
-                        <p className="text-sm text-muted-foreground">Years Experience</p>
-                        <p className="text-xl font-bold text-foreground">15+</p>
+                {/* ক্যাটাগরি ফিল্টার */}
+                <div className="space-y-4">
+                  <Label className="text-sm font-black uppercase text-gray-400 tracking-widest">Categories</Label>
+                  <div className="space-y-3">
+                    {categories.map((cat) => (
+                      <div key={cat} className="flex items-center space-x-3">
+                        <Checkbox 
+                          id={cat} 
+                          checked={selectedCategory.includes(cat)}
+                          onCheckedChange={() => handleCategoryChange(cat)}
+                        />
+                        <label htmlFor={cat} className="text-sm font-medium leading-none cursor-pointer text-gray-600">
+                          {cat}
+                        </label>
                       </div>
-                      <div className="border-l-2 border-primary pl-3">
-                        <p className="text-sm text-muted-foreground">Jobs Completed</p>
-                        <p className="text-xl font-bold text-foreground">1,200+</p>
-                      </div>
-                      <div className="border-l-2 border-primary pl-3">
-                        <p className="text-sm text-muted-foreground">Repeat Clients</p>
-                        <p className="text-xl font-bold text-foreground">87%</p>
-                      </div>
-                    </div>
+                    ))}
                   </div>
                 </div>
               </CardContent>
             </Card>
+          </aside>
 
-            {/* Skills Section */}
-            <Card className="border-0 shadow-lg">
-              <CardHeader>
-                <CardTitle>Core Skills & Services</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  {skills.map((skill) => (
-                    <div key={skill} className="flex items-center gap-3 p-3 bg-secondary/30 rounded-lg">
-                      <div className="size-2 rounded-full bg-primary shrink-0" />
-                      <span className="text-sm text-foreground font-medium">{skill}</span>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Reviews Section */}
-            <Card className="border-0 shadow-lg">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-3">
-                  <Star className="fill-amber-400 text-amber-400" size={20} />
-                  Customer Reviews
-                </CardTitle>
-                <CardDescription>
-                  {averageRating.toFixed(1)} average rating from {reviews.length} verified customers
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                {reviews.map((review) => (
-                  <div key={review.id} className="border-b pb-4 last:border-b-0">
-                    <div className="flex items-start justify-between gap-3 mb-2">
-                      <div>
-                        <p className="font-medium text-foreground">{review.name}</p>
-                        <StarRating rating={review.rating} />
-                      </div>
-                    </div>
-                    <p className="text-sm text-muted-foreground leading-relaxed">{review.text}</p>
-                  </div>
+          {/* ডান পাশ: সার্ভিস গ্রিড */}
+          <main className="flex-1">
+            {filteredServices.length > 0 ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                {filteredServices.map((service: IService) => (
+                  <ServiceCard 
+                    key={service.id}
+                    image={service.image || "https://images.unsplash.com/photo-1621905251189-08b45d6a269e?q=80&w=2071"}
+                    serviceName={service.name}
+                    technicianName={service.technician?.name || "Professional"}
+                    rating={4.9}
+                    reviews={150}
+                    startingPrice={service.price}
+  
+                  />
                 ))}
-              </CardContent>
-            </Card>
-          </div>
-
-          {/* Right Column - Booking Card (Sticky) */}
-          <div className="lg:col-span-1">
-            <Card className="sticky top-4 border-0 shadow-xl">
-              <CardHeader className="border-b bg-linear-to-r from-primary/10 to-primary/5 p-4">
-                <CardTitle>Book a Service</CardTitle>
-                <CardDescription>Select your preferred date and time</CardDescription>
-              </CardHeader>
-              <CardContent className="pt-6">
-                <div className="space-y-6">
-                  {/* Calendar */}
-                  <div>
-                    <label className="block text-sm font-medium text-foreground mb-3">
-                      Select Date
-                    </label>
-                    <div className="flex justify-center">
-                      <Calendar
-                        mode="single"
-                        selected={selectedDate}
-                        onSelect={setSelectedDate}
-                        disabled={(date) => {
-                          const today = new Date()
-                          today.setHours(0, 0, 0, 0)
-                          return date < today
-                        }}
-                        className="rounded-md border"
-                      />
-                    </div>
-                  </div>
-
-                  {/* Time Slots */}
-                  <div>
-                    <label className="block text-sm font-medium text-foreground mb-3">
-                      Select Time
-                    </label>
-                    <div className="grid grid-cols-2 gap-2">
-                      {timeSlots.map((time) => (
-                        <Button
-                          key={time}
-                          variant={selectedTime === time ? 'default' : 'outline'}
-                          size="sm"
-                          className="h-9 text-xs"
-                          onClick={() => setSelectedTime(time)}
-                        >
-                          {time}
-                        </Button>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Service Summary */}
-                  {selectedDate && selectedTime && (
-                    <div className="bg-secondary/50 rounded-lg p-4 space-y-2">
-                      <p className="text-xs text-muted-foreground">Selected Service</p>
-                      <p className="font-medium text-foreground">
-                        {selectedDate.toLocaleDateString('en-US', {
-                          weekday: 'short',
-                          month: 'short',
-                          day: 'numeric',
-                        })}{' '}
-                        at {selectedTime}
-                      </p>
-                    </div>
-                  )}
-
-                  {/* Book Now Button */}
-                  <Button
-                    onClick={handleBookNow}
-                    disabled={!selectedDate || !selectedTime || isBoking}
-                    className="w-full h-10 text-base font-semibold"
-                    size="lg"
-                  >
-                    {isBoking ? 'Booking...' : 'Book Now'}
-                  </Button>
-
-                  {/* Info Text */}
-                  <p className="text-xs text-muted-foreground text-center">
-                    You will receive a confirmation and can reschedule anytime for free.
-                  </p>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
+              </div>
+            ) : (
+              <div className="bg-white rounded-3xl p-20 text-center shadow-sm border border-dashed">
+                 <p className="text-gray-400 text-lg font-medium">No services found matching your criteria.</p>
+                 <Button variant="link" onClick={() => {setSearchTerm(""); setSelectedCategory([])}}>Clear all filters</Button>
+              </div>
+            )}
+          </main>
         </div>
       </div>
     </div>

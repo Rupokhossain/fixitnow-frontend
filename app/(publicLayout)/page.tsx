@@ -122,7 +122,7 @@ export default function Page() {
               {services.map((service: any) => (
                 <ServiceCard
                   key={service.id}
-                  image={service.image || "/images/plumbing.png"}
+                  image={service.image || "https://images.unsplash.com/photo-1621905251189-08b45d6a269e?q=80&w=2071"}
                   serviceName={service.name}
                   technicianName={service.provider?.name || "Verified Pro"}
                   rating={service.rating || 5.0}
