@@ -1,67 +1,164 @@
-"use client"
+/* eslint-disable @typescript-eslint/no-explicit-any */
+"use client";
 
-import { useGetTechProfileQuery, useGetTechAvailabilityQuery } from "@/app/redux/api/technicianApi";
+import {
+  useGetTechProfileQuery,
+  useGetTechAvailabilityQuery,
+  useGetTechBookingsQuery,
+} from "@/app/redux/api/technicianApi";
 import OverviewCards from "../../_components/overview-card";
-import { Loader2, User as UserIcon, CalendarCheck } from "lucide-react";
+import {
+  Loader2,
+  User as UserIcon,
+  CalendarCheck,
+  MapPin,
+  Briefcase,
+  Info,
+} from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { useSelector } from "react-redux";
+import { RootState } from "@/app/redux/store";
 
 export default function TechnicianOverview() {
-  const { data: profileRes, isLoading: profileLoading } = useGetTechProfileQuery();
-  const { data: availabilityRes, isLoading: availLoading } = useGetTechAvailabilityQuery();
+  const user = useSelector((state: RootState) => state.auth.user);
 
-  if (profileLoading || availLoading) {
-    return <div className="flex h-screen items-center justify-center"><Loader2 className="animate-spin" /></div>;
+  const { data: profileRes, isLoading: profileLoading } =
+    useGetTechProfileQuery();
+
+  const { data: availabilityRes, isLoading: availabilityLoading } =
+    useGetTechAvailabilityQuery();
+
+  const { data: bookingsRes, isLoading: bookingsLoading } =
+    useGetTechBookingsQuery();
+
+  if (profileLoading || availabilityLoading || bookingsLoading) {
+    return (
+      <div className="flex h-[70vh] items-center justify-center">
+        <Loader2 className="h-10 w-10 animate-spin text-primary" />
+      </div>
+    );
   }
 
-  const profile = profileRes?.data;
+  const techProfile = profileRes?.data;
   const availability = availabilityRes?.data;
+  const bookings = bookingsRes?.data ?? [];
 
-  // Overview Card এর জন্য ডাটা ক্যালকুলেশন
   const stats = {
-    totalUsers: 0, 
-    totalBookings: 0, // এগুলো পরে বুকিং ডাটা থেকে ক্যালকুলেট করা যাবে
-    totalRevenue: profile?.technicianProfile?.pricing || 0,
-    activeTechnicians: 1
+    totalUsers: bookings.filter((b) =>
+      ["ACCEPTED", "IN_PROGRESS"].includes(b.status)
+    ).length,
+
+    totalBookings: bookings.length,
+
+    totalRevenue: bookings.reduce(
+      (sum: number, booking: any) =>
+        sum + (booking.service?.price ?? booking.price ?? 0),
+      0
+    ),
+
+    activeTechnicians: 1,
   };
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 animate-in fade-in duration-700">
       <div>
-        <h1 className="text-3xl font-bold text-gray-900">Technician Dashboard</h1>
-        <p className="text-gray-600">Welcome back, {profile?.name}</p>
+        <h1 className="text-3xl font-black tracking-tight">
+          Technician Dashboard
+        </h1>
+
+        <p className="mt-1 text-gray-500 italic">
+          Welcome back,
+          <span className="ml-1 font-bold text-primary not-italic">
+            {user?.name}
+          </span>
+        </p>
       </div>
 
       <OverviewCards stats={stats} />
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {/* Profile Summary */}
-        <Card>
-          <CardHeader className="flex flex-row items-center gap-2">
-            <UserIcon size={20} className="text-blue-600" />
-            <CardTitle className="text-lg">Profile Status</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-sm text-gray-600">Bio: {profile?.technicianProfile?.bio || "No bio set"}</p>
-            <div className="mt-4 flex gap-2">
-              <Badge variant="outline">{profile?.technicianProfile?.experience} Exp</Badge>
-              <Badge variant="secondary">${profile?.technicianProfile?.pricing} /hr</Badge>
+      <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
+        {/* Profile */}
+
+        <Card className="rounded-3xl border-0 shadow-md">
+          <CardHeader className="flex flex-row items-center gap-3 border-b bg-gray-50/50">
+            <div className="rounded-lg bg-blue-100 p-2 text-blue-600">
+              <UserIcon size={20} />
             </div>
+
+            <CardTitle>Professional Identity</CardTitle>
+          </CardHeader>
+
+          <CardContent className="p-8">
+            {techProfile ? (
+              <div className="space-y-6">
+                <div>
+                  <p className="mb-2 text-[10px] font-black uppercase tracking-widest text-gray-400">
+                    About Me
+                  </p>
+
+                  <p className="text-sm leading-relaxed text-gray-700">
+                    {techProfile.bio || "No bio available"}
+                  </p>
+                </div>
+
+                <div className="flex flex-wrap gap-3">
+                  <Badge className="rounded-xl bg-gray-100 px-3 py-2 text-gray-700">
+                    <Briefcase className="mr-2 h-4 w-4 text-primary" />
+                    {techProfile.experience}
+                  </Badge>
+
+                  <Badge className="rounded-xl bg-gray-100 px-3 py-2 text-gray-700">
+                    <MapPin className="mr-2 h-4 w-4 text-primary" />
+                    {techProfile.location || "N/A"}
+                  </Badge>
+
+                  <Badge className="rounded-xl bg-blue-600 px-3 py-2 text-white">
+                    ${techProfile.pricing}/hr
+                  </Badge>
+                </div>
+              </div>
+            ) : (
+              <div className="rounded-xl border border-dashed border-orange-300 bg-orange-50 py-8 text-center">
+                <Info className="mx-auto mb-3 text-orange-500" />
+
+                <p className="font-bold text-orange-700">
+                  Profile Incomplete
+                </p>
+
+                <p className="text-xs text-orange-600">
+                  Please update your technician profile.
+                </p>
+              </div>
+            )}
           </CardContent>
         </Card>
 
-        {/* Availability Status */}
-        <Card>
-          <CardHeader className="flex flex-row items-center gap-2">
-            <CalendarCheck size={20} className="text-green-600" />
-            <CardTitle className="text-lg">Work Availability</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="flex items-center gap-3">
-              <div className={`h-3 w-3 rounded-full ${availability?.status === 'Available' ? 'bg-green-500' : 'bg-red-500'}`} />
-              <span className="font-medium">{availability?.status || "Offline"}</span>
+        {/* Availability */}
+
+        <Card className="rounded-3xl border-0 shadow-md">
+          <CardHeader className="flex flex-row items-center gap-3 border-b bg-gray-50/50">
+            <div className="rounded-lg bg-green-100 p-2 text-green-600">
+              <CalendarCheck size={20} />
             </div>
-            <p className="text-xs text-gray-500 mt-2">Update this from your Scheduler settings.</p>
+
+            <CardTitle>Availability</CardTitle>
+          </CardHeader>
+
+          <CardContent className="flex min-h-[160px] items-center">
+            <div className="flex items-center gap-5">
+              <div className="h-5 w-5 rounded-full bg-green-500 animate-pulse" />
+
+              <div>
+                <h2 className="text-xl font-bold">
+                  {availability?.availability ?? "Offline"}
+                </h2>
+
+                <p className="text-xs uppercase tracking-widest text-gray-400">
+                  Current Schedule
+                </p>
+              </div>
+            </div>
           </CardContent>
         </Card>
       </div>

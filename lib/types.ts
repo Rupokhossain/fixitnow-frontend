@@ -8,28 +8,45 @@ export interface ITechnicianProfile {
   availability?: string | null;
 }
 
+export interface IAvailability {
+  availability: string;
+}
+
 export interface IUser {
   id: string;
   name: string;
   email: string;
-  role: 'TECHNICIAN' | 'CUSTOMER' | 'ADMIN';
-  status: 'ACTIVE' | 'BANNED';
+  role: "CUSTOMER" | "TECHNICIAN" | "ADMIN";
+  status: "ACTIVE" | "BANNED";
   technicianProfile?: ITechnicianProfile | null;
 }
 
 export interface IBooking {
-  id?: string;
-  service?: { name: string; price: number };
-  customer?: { name: string; email: string };
-  technician?: { name: string };
-  slotDate: string;
-  slotTime: string;
-  status: 'REQUESTED' | 'ACCEPTED' | 'PAID' | 'IN_PROGRESS' | 'COMPLETED' | 'DECLINED';
-  price?: number;
-  scheduledAt?: string;
-}
+  id: string;
+  price?: string;
+  service?: {
+    name: string;
+    price: number;
+  };
 
-export interface IAvailability {
-  status: 'Available' | 'Unavailable' | 'Offline';
-  nextAvailableSlot?: string;
+  customer?: {
+    name: string;
+    email: string;
+  };
+
+  technician?: {
+    name: string;
+  };
+
+  scheduledAt: string;
+
+  status:
+    | "REQUESTED"
+    | "ACCEPTED"
+    | "PAID"
+    | "IN_PROGRESS"
+    | "COMPLETED"
+    | "DECLINED";
+
+  payment?: unknown;
 }
