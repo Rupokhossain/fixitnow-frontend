@@ -6,6 +6,7 @@ export interface ITechnicianProfile {
   pricing: number;
   location?: string | null;
   availability?: string | null;
+  technicianProfile?: string
 }
 
 export interface IAvailability {
@@ -49,4 +50,18 @@ export interface IBooking {
     | "DECLINED";
 
   payment?: unknown;
+}
+
+export interface ISlot {
+  time: string;
+  available: boolean;
+}
+
+export interface IAvailabilityResponse {
+  success: boolean;
+  message: string;
+  data: {
+    status: string;
+    availability: string;
+  };
 }

@@ -1,4 +1,4 @@
-import { IAvailability, IBooking, ITechnicianProfile, IUser } from "@/lib/types"
+import { IAvailability, IAvailabilityResponse, IBooking, ITechnicianProfile, IUser } from "@/lib/types"
 import { baseApi } from "./baseApi"
 
 const technicianApi = baseApi.injectEndpoints({
@@ -57,6 +57,16 @@ const technicianApi = baseApi.injectEndpoints({
 
       invalidatesTags: ["Users"],
     }),
+
+    updateAvailability: builder.mutation<IAvailabilityResponse, { availability: string }>({
+  query: (data) => ({
+    url: "technician/availability", // তোমার ব্যাকএন্ড এন্ডপয়েন্ট (PUT বা PATCH চেক করে নিও)
+    method: "PUT", 
+    body: data,
+  }),
+  invalidatesTags: ["Users", "Bookings"], // এটি করলে ড্যাশবোর্ড কার্ড অটো আপডেট হবে
+}),
+    
   }),
 })
 
@@ -67,4 +77,5 @@ export const {
   useUpdateTechBookingMutation,
   useGetSingleTechnicianQuery,
   useUpdateTechProfileMutation,
+  useUpdateAvailabilityMutation
 } = technicianApi
