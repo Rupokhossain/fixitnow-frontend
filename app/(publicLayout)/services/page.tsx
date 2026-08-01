@@ -6,11 +6,12 @@ import ServiceCard from '@/components/shared/service-card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Checkbox } from '@/components/ui/checkbox'
-import { Search, Filter, Loader2, SlidersHorizontal } from 'lucide-react'
+import { Search, Loader2, SlidersHorizontal } from 'lucide-react'
 import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
+import { useSearchParams } from 'next/navigation'
 
-// --- টাইপ ডিফিনিশন ---
+
 interface IService {
   id: string;
   name: string;
@@ -22,14 +23,16 @@ interface IService {
 }
 
 export default function AllServicesPage() {
+
+    const searchParams = useSearchParams()
+  const initialSearch = searchParams.get('searchTerm') || "" 
+
   const [searchTerm, setSearchTerm] = useState("")
   const [selectedCategory, setSelectedCategory] = useState<string[]>([])
 
-  // ১. এপিআই থেকে সব ডাটা নিয়ে আসা
   const { data, isLoading } = useGetServicesQuery({})
   const allServices = data?.data || [];
 
-  // ২. ফ্রন্টএন্ড ফিল্টারিং লজিক (Search & Category)
   const filteredServices = useMemo(() => {
     return allServices.filter((service: IService) => {
       const matchesSearch = service.name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -53,7 +56,6 @@ export default function AllServicesPage() {
     <div className="min-h-screen bg-gray-50 py-10">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
-        {/* হেডার এবং সার্চ বার */}
         <div className="mb-10 text-center">
           <h1 className="text-4xl font-black text-gray-900 mb-4">Explore Professional Services</h1>
           <div className="max-w-2xl mx-auto relative">
@@ -69,7 +71,6 @@ export default function AllServicesPage() {
 
         <div className="flex flex-col lg:row gap-8 lg:flex-row">
           
-          {/* বাম পাশ: ফিল্টার সাইডবার */}
           <aside className="w-full lg:w-64 space-y-6">
             <Card className="border-0 shadow-sm rounded-2xl">
               <CardContent className="p-6">
@@ -77,7 +78,6 @@ export default function AllServicesPage() {
                   <SlidersHorizontal size={18} /> Filters
                 </div>
 
-                {/* ক্যাটাগরি ফিল্টার */}
                 <div className="space-y-4">
                   <Label className="text-sm font-black uppercase text-gray-400 tracking-widest">Categories</Label>
                   <div className="space-y-3">
@@ -99,12 +99,12 @@ export default function AllServicesPage() {
             </Card>
           </aside>
 
-          {/* ডান পাশ: সার্ভিস গ্রিড */}
           <main className="flex-1">
             {filteredServices.length > 0 ? (
               <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
                 {filteredServices.map((service: IService) => (
                   <ServiceCard 
+                  id={service.id}
                     key={service.id}
                     image={service.image || "https://images.unsplash.com/photo-1621905251189-08b45d6a269e?q=80&w=2071"}
                     serviceName={service.name}

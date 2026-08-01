@@ -7,10 +7,18 @@ export interface ITechnicianProfile {
   location?: string | null;
   availability?: string | null;
   technicianProfile?: string
+
 }
 
 export interface IAvailability {
   availability: string;
+}
+
+export interface IService {
+  id: string;
+  name: string;
+  description: string;
+  price: number;
 }
 
 export interface IUser {
@@ -19,9 +27,11 @@ export interface IUser {
   email: string;
   role: "CUSTOMER" | "TECHNICIAN" | "ADMIN";
   status: "ACTIVE" | "BANNED";
-  technicianProfile?: ITechnicianProfile | null;
-}
 
+  technicianProfile?: ITechnicianProfile | null;
+
+  services?: IService[];
+}
 export interface IBooking {
   id: string;
   price?: string;

@@ -1,10 +1,11 @@
-import { Geist, Geist_Mono, Inter } from "next/font/google"
+import { Geist_Mono, Inter } from "next/font/google"
 
 import "./globals.css"
 
 import { cn } from "@/lib/utils"
 import { Toaster } from "sonner"
 import { StoreProvider } from "./providers/StoreProvider"
+import { getLoggedInUserAction } from "./(authLayout)/auth/_actions/authActions"
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" })
 
@@ -13,11 +14,13 @@ const fontMono = Geist_Mono({
   variable: "--font-mono",
 })
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode
 }>) {
+
+  const user = await getLoggedInUserAction();
   return (
     <html
       lang="en"
@@ -31,7 +34,7 @@ export default function RootLayout({
     >
       <body>
         <div>
-          <StoreProvider>
+          <StoreProvider initialUser={user}>
             {children}
             <Toaster position="top-center" richColors />
           </StoreProvider>

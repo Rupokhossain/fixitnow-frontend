@@ -95,3 +95,24 @@ export const loginAction = async (
     }
   }
 }
+
+
+
+export const getLoggedInUserAction = async () => {
+  const cookieStore = await cookies();
+  const token = cookieStore.get("accessToken")?.value;
+
+  if (!token) return null;
+
+  try {
+    const decoded = jwt.decode(token) as JwtPayload;
+    return {
+      id: decoded.id,
+      name: decoded.name,
+      email: decoded.email,
+      role: decoded.role,
+    };
+  } catch (error) {
+    return null;
+  }
+}

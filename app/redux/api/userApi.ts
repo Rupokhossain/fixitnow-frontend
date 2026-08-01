@@ -4,7 +4,7 @@ const userApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getAllUsers: builder.query({
       query: ({searchTerm}) => ({
-        url: "/admin/users",
+        url: "/api/admin/users",
         params: {
           searchTerm
         }
@@ -15,7 +15,7 @@ const userApi = baseApi.injectEndpoints({
 
     updateUserStatus: builder.mutation({
       query: ({ id, status }) => ({
-        url: `/admin/users/${id}`, 
+        url: `/api/admin/users/${id}`, 
         method: "PATCH",
         body: { status },
       }),

@@ -17,6 +17,8 @@ import { useActionState, useEffect } from "react"
 import { loginAction } from "../_actions/authActions"
 import { useSearchParams } from "next/navigation"
 import { toast } from "sonner"
+import { useDispatch } from "react-redux"
+import { setUser } from "@/app/redux/features/authSlice"
 
 const LoginForm = () => {
   const searchParams = useSearchParams()
@@ -26,6 +28,7 @@ const LoginForm = () => {
     loginAction.bind(null, redirectTo),
     false
   )
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (state && !state.success) {
@@ -33,9 +36,10 @@ const LoginForm = () => {
     }
 
     if (state && state.success) {
+       dispatch(setUser(state.data.user)); 
       toast.success("Login Successful!")
     }
-  }, [state])
+  }, [state, dispatch])
 
   return (
     <form action={action}>

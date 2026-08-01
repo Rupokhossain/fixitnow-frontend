@@ -38,7 +38,7 @@ interface IReview {
   id: string
   rating: number
   comment: string
-  technicianId: string // ফিল্টার করার জন্য জরুরি
+  technicianId: string
   createdAt: string
   customer: {
     name: string

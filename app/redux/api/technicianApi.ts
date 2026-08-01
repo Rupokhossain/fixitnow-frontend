@@ -7,7 +7,7 @@ const technicianApi = baseApi.injectEndpoints({
       { success: boolean; data: ITechnicianProfile },
       void
     >({
-      query: () => "technician/profile",
+      query: () => "/api/technician/profile",
       providesTags: ["Users"],
     }),
 
@@ -15,7 +15,7 @@ const technicianApi = baseApi.injectEndpoints({
       { success: boolean; data: IAvailability },
       void
     >({
-      query: () => "technician/availability",
+      query: () => "/api/technician/availability",
       providesTags: ["Users"],
     }),
 
@@ -23,7 +23,7 @@ const technicianApi = baseApi.injectEndpoints({
       { success: boolean; data: IBooking[] },
       void
     >({
-      query: () => "technician/bookings",
+      query: () => "/api/technician/bookings",
       providesTags: ["Bookings"],
     }),
 
@@ -32,7 +32,7 @@ const technicianApi = baseApi.injectEndpoints({
       { id: string; status: string }
     >({
       query: ({ id, status }) => ({
-        url: `technician/bookings/${id}`,
+        url: `/api/technician/bookings/${id}`,
         method: "PATCH",
         body: { status },
       }),
@@ -44,13 +44,13 @@ const technicianApi = baseApi.injectEndpoints({
       { success: boolean; data: IUser },
       string
     >({
-      query: (id) => `technicians/${id}`,
+      query: (id) => `/api/technicians/${id}`,
       providesTags: ["Users"],
     }),
 
     updateTechProfile: builder.mutation({
       query: (body) => ({
-        url: "technician/profile",
+        url: "/api/technician/profile",
         method: "PUT",
         body,
       }),
@@ -60,7 +60,7 @@ const technicianApi = baseApi.injectEndpoints({
 
     updateAvailability: builder.mutation<IAvailabilityResponse, { availability: string }>({
   query: (data) => ({
-    url: "technician/availability", // তোমার ব্যাকএন্ড এন্ডপয়েন্ট (PUT বা PATCH চেক করে নিও)
+    url: "/api/technician/availability", // তোমার ব্যাকএন্ড এন্ডপয়েন্ট (PUT বা PATCH চেক করে নিও)
     method: "PUT", 
     body: data,
   }),
@@ -68,9 +68,10 @@ const technicianApi = baseApi.injectEndpoints({
 }),
 // reviewApi.ts এর ভেতরে এটি যোগ করো
 getAllReviews: builder.query({
-  query: () => "/reviews", // তোমার ব্যাকএন্ডের GET /reviews এন্ডপয়েন্ট অনুযায়ী
+  query: () => "/api/reviews", // তোমার ব্যাকএন্ডের GET /reviews এন্ডপয়েন্ট অনুযায়ী
   providesTags: ["Users"], // ট্যাগটি Users রাখো যাতে প্রোফাইল আপডেটের সাথে মিলে যায়
 }),
+
     
   }),
 })

@@ -3,16 +3,16 @@ import { baseApi } from "./baseApi"
 const bookingApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getAllBookings: builder.query({
-      query: () => "admin/bookings",
+      query: () => "/api/admin/bookings",
       providesTags: ["Bookings"],
     }),
     getBookings: builder.query({
-      query: () => "/bookings",
+      query: () => "/api/bookings",
       providesTags: ["Bookings"],
     }),
     updateBookingStatus: builder.mutation({
       query: ({ id, status }) => ({
-        url: `/technician/bookings/${id}`,
+        url: `/api/technician/bookings/${id}`,
         method: "PATCH",
         body: { status },
       }),
@@ -21,7 +21,7 @@ const bookingApi = baseApi.injectEndpoints({
 
     createBooking: builder.mutation({
       query: (data) => ({
-        url: "/bookings", 
+        url: "/api/bookings", 
         method: "POST",
         body: data,
       }),

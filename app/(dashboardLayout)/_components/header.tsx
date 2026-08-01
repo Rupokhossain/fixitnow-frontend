@@ -33,7 +33,7 @@ export function Header() {
   return (
     <header className="fixed top-0 right-0 left-64 z-40 flex h-20 items-center justify-between border-b border-gray-200 bg-white px-8 md:left-0 lg:left-64">
       {/* Search Bar */}
-      <div className="max-w-md flex-1">
+      {/* <div className="max-w-md flex-1">
         <div className="relative">
           <Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-gray-400" />
           <Input
@@ -41,12 +41,12 @@ export function Header() {
             className="border-gray-200 bg-gray-50 pl-10 text-sm focus:bg-white focus:ring-blue-500"
           />
         </div>
-      </div>
+      </div> */}
 
       {/* Right Section: Notifications & Profile */}
       <div className="ml-auto flex items-center gap-4">
         {/* Notifications Bell */}
-        <button
+        {/* <button
           className={cn(
             "relative rounded-lg p-2 transition-colors",
             hasNotifications
@@ -58,7 +58,7 @@ export function Header() {
           {hasNotifications && (
             <span className="absolute top-1 right-1 h-2 w-2 rounded-full bg-red-500"></span>
           )}
-        </button>
+        </button> */}
 
         {/* Profile Dropdown */}
         <DropdownMenu modal={false}>

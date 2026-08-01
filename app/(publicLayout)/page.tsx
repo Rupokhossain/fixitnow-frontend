@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+
 "use client"
 
 import HeroSection from "@/components/shared/hero-section"
@@ -7,62 +7,19 @@ import { Button } from "@/components/ui/button"
 import { CheckCircle2, Clock, Shield, Loader2 } from "lucide-react"
 import { useGetServicesQuery } from "../redux/api/baseApi"
 
-// const services = [
-//   {
-//     id: 1,
-//     image: '/images/plumbing.png',
-//     serviceName: 'Plumbing Services',
-//     technicianName: 'John Smith',
-//     rating: 4.8,
-//     reviews: 156,
-//     startingPrice: 79,
-//   },
-//   {
-//     id: 2,
-//     image: '/images/electrical.png',
-//     serviceName: 'Electrical Work',
-//     technicianName: 'Mike Johnson',
-//     rating: 4.9,
-//     reviews: 203,
-//     startingPrice: 89,
-//   },
-//   {
-//     id: 3,
-//     image: '/images/hvac.png',
-//     serviceName: 'HVAC Maintenance',
-//     technicianName: 'David Wilson',
-//     rating: 4.7,
-//     reviews: 128,
-//     startingPrice: 99,
-//   },
-//   {
-//     id: 4,
-//     image: '/images/cleaning.png',
-//     serviceName: 'House Cleaning',
-//     technicianName: 'Sarah Miller',
-//     rating: 4.9,
-//     reviews: 342,
-//     startingPrice: 59,
-//   },
-//   {
-//     id: 5,
-//     image: '/images/painting.png',
-//     serviceName: 'Interior Painting',
-//     technicianName: 'Robert Brown',
-//     rating: 4.8,
-//     reviews: 98,
-//     startingPrice: 129,
-//   },
-//   {
-//     id: 6,
-//     image: '/images/carpentry.png',
-//     serviceName: 'Carpentry & Repairs',
-//     technicianName: 'James Davis',
-//     rating: 4.6,
-//     reviews: 87,
-//     startingPrice: 119,
-//   },
-// ]
+interface IProvider {
+  name: string;
+}
+
+interface IService {
+  id: string;
+  name: string;
+  image?: string;
+  provider?: IProvider;
+  rating?: number;
+  reviewCount?: number;
+  price: number;
+}
 
 const features = [
   {
@@ -119,10 +76,14 @@ export default function Page() {
             </div>
           ) : (
             <div className="grid grid-cols-1 gap-6 md:grid-cols-2 md:gap-8 lg:grid-cols-3">
-              {services.map((service: any) => (
+              {services.map((service: IService) => (
                 <ServiceCard
+                  id={service.id}
                   key={service.id}
-                  image={service.image || "https://images.unsplash.com/photo-1621905251189-08b45d6a269e?q=80&w=2071"}
+                  image={
+                    service.image ||
+                    "https://images.unsplash.com/photo-1621905251189-08b45d6a269e?q=80&w=2071"
+                  }
                   serviceName={service.name}
                   technicianName={service.provider?.name || "Verified Pro"}
                   rating={service.rating || 5.0}
