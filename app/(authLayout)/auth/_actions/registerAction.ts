@@ -73,8 +73,6 @@ export const registerAction = async (
 
     const result = await res.json()
 
-    // console.log("Backend Response:", result)
-
     if (!res.ok) {
       return {
         success: false,
@@ -91,8 +89,6 @@ export const registerAction = async (
       message: result.message || "Registration failed.",
     }
   } catch (error) {
-    // console.error("Register Action Error:", error)
-
     throw error
   }
 }

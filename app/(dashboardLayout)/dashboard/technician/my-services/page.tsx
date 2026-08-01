@@ -12,21 +12,18 @@ import { toast } from "sonner"
 import { Loader2, Save } from "lucide-react"
 import { useUpdateTechProfileMutation } from "@/app/redux/api/technicianApi"
 
-// ১. Zod Schema (এখানে pricing কে সহজ রাখার জন্য string রাখা হয়েছে যাতে ইনপুটে সমস্যা না হয়)
 const profileSchema = z.object({
   bio: z.string().min(10, "Bio is too short"),
   skills: z.string().min(3, "Skills are required"),
   experience: z.string().min(1, "Experience is required"),
-  pricing: z.string().min(1, "Pricing is required"), // সহজ করার জন্য string
+  pricing: z.string().min(1, "Pricing is required"), 
   location: z.string().min(2, "Location is required"),
 })
 
 
-// ২. অটোমেটিক টাইপ জেনারেশন (এটিই বেস্ট প্র্যাকটিস)
 type ProfileFormValues = z.infer<typeof profileSchema>
 
 export default function MyServicesPage() {
-  // ৩. useForm সেটআপ (সব টাইপ এখন অটোমেটিক মিলে যাবে)
   const {
     register,
     handleSubmit,
@@ -44,19 +41,17 @@ export default function MyServicesPage() {
 const [updateProfile] = useUpdateTechProfileMutation()
 
 
-  // ৪. সাবমিট হ্যান্ডেলার
   const onSubmit: SubmitHandler<ProfileFormValues> = async (data) => {
     try {
-      // ৩. ডাটাবেসে পাঠানোর আগে ডাটা ঠিক করে নাও
       const payload = {
         bio: data.bio,
         skills: data.skills,
         experience: data.experience,
-        pricing: Number(data.pricing), // স্ট্রিং থেকে নাম্বারে কনভার্ট
+        pricing: Number(data.pricing),
         location: data.location
       };
 
-      // ৪. আসল এপিআই কল
+
       await updateProfile(payload).unwrap();
       
       toast.success("Profile updated successfully!");

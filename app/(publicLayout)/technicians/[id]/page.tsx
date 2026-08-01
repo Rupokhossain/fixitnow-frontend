@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client"
 
-import { useState, useMemo } from "react"
+import { useState } from "react"
 import { useParams, useRouter } from "next/navigation"
 import Link from "next/link"
 import { useSelector } from "react-redux"
@@ -12,7 +12,7 @@ import { useCreateBookingMutation } from "@/app/redux/api/bookingApi"
 import { useGetSingleTechnicianQuery } from "@/app/redux/api/technicianApi"
 
 import { Calendar } from "@/components/ui/calendar"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -64,7 +64,6 @@ export default function TechnicianPublicProfile() {
   const router = useRouter()
   const techId = params.id as string
 
-  // ১. স্টেট এবং এপিআই হুকস
   const user = useSelector((state: RootState) => state.auth.user)
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date())
   const [selectedTime, setSelectedTime] = useState<string | null>(null)
@@ -75,7 +74,6 @@ export default function TechnicianPublicProfile() {
 
   const technician = techRes?.data as ITechnician | undefined
 
-  // ২. বুকিং হ্যান্ডেলার
   const handleBookNow = async () => {
     if (!user) {
       toast.error("Please login to book a service")

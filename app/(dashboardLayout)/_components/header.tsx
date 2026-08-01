@@ -1,9 +1,7 @@
 "use client"
 
-import { useState } from "react"
-import { Search, Bell, LogOut, User, ChevronDown } from "lucide-react"
+import { LogOut, User, ChevronDown } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,7 +9,6 @@ import {
   DropdownMenuTrigger,
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu"
-import { cn } from "@/lib/utils"
 import { useDispatch, useSelector } from "react-redux"
 import { RootState } from "@/app/redux/store"
 import { logout } from "@/app/redux/features/authSlice"
@@ -28,38 +25,10 @@ export function Header() {
 
   const user = useSelector((state: RootState) => state.auth.user)
 
-  const [hasNotifications, setHasNotifications] = useState(true)
-
   return (
     <header className="fixed top-0 right-0 left-64 z-40 flex h-20 items-center justify-between border-b border-gray-200 bg-white px-8 md:left-0 lg:left-64">
-      {/* Search Bar */}
-      {/* <div className="max-w-md flex-1">
-        <div className="relative">
-          <Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-gray-400" />
-          <Input
-            placeholder="Search bookings, services..."
-            className="border-gray-200 bg-gray-50 pl-10 text-sm focus:bg-white focus:ring-blue-500"
-          />
-        </div>
-      </div> */}
-
       {/* Right Section: Notifications & Profile */}
       <div className="ml-auto flex items-center gap-4">
-        {/* Notifications Bell */}
-        {/* <button
-          className={cn(
-            "relative rounded-lg p-2 transition-colors",
-            hasNotifications
-              ? "bg-blue-50 text-blue-600 hover:bg-blue-100"
-              : "text-gray-600 hover:bg-gray-100"
-          )}
-        >
-          <Bell className="h-5 w-5" />
-          {hasNotifications && (
-            <span className="absolute top-1 right-1 h-2 w-2 rounded-full bg-red-500"></span>
-          )}
-        </button> */}
-
         {/* Profile Dropdown */}
         <DropdownMenu modal={false}>
           <DropdownMenuTrigger asChild>

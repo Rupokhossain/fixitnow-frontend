@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client"
 
 import { useParams, useRouter } from "next/navigation"
@@ -29,11 +30,9 @@ export default function PaymentInitiationPage() {
   const router = useRouter()
   const bookingId = params.id as string
 
-  // ১. বুকিং ডাটা ফেচ করা
   const { data: bookingRes, isLoading: isFetching } = useGetBookingsQuery({})
   const booking = bookingRes?.data?.find((b: IBooking) => b.id === bookingId)
 
-  // ২. পেমেন্ট হ্যান্ডেলার
   const handlePayment = async () => {
     try {
       const toastId = toast.loading("Connecting to secure payment gateway...")
@@ -48,7 +47,7 @@ export default function PaymentInitiationPage() {
       } else {
         toast.error(result.message || "Could not initiate payment")
       }
-    } catch (err) {
+    } catch (err: any) {
       toast.error("An unexpected error occurred. Please try again.")
     }
   }

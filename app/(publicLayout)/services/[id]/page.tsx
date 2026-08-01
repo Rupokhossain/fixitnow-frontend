@@ -4,7 +4,7 @@
 import { useState, useMemo } from "react"
 import { useParams, useRouter } from "next/navigation"
 import { Calendar } from "@/components/ui/calendar"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -20,7 +20,6 @@ import { useGetServicesQuery } from "@/app/redux/api/baseApi"
 import { useGetAllReviewsQuery } from "@/app/redux/api/technicianApi"
 import { cn } from "@/lib/utils"
 
-// --- TypeScript Interfaces ---
 interface ICategory {
   id: string
   name: string
@@ -72,7 +71,6 @@ export default function ServiceDetailsPage() {
   const router = useRouter()
   const serviceId = params.id as string
 
-  // ১. রেডক্স এবং এপিআই ডাটা
   const user = useSelector((state: RootState) => state.auth.user)
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date())
   const [selectedTime, setSelectedTime] = useState<string | null>(null)
@@ -81,19 +79,16 @@ export default function ServiceDetailsPage() {
   const { data: reviewsRes, isLoading: isReviewsLoading } = useGetAllReviewsQuery({})
   const [createBooking, { isLoading: isBookingLoading }] = useCreateBookingMutation()
 
-  // নির্দিষ্ট সার্ভিস খুঁজে বের করা
   const service = useMemo(() => 
     servicesData?.data?.find((s: IService) => s.id === serviceId), 
     [servicesData, serviceId]
   ) as IService | undefined
 
-  // নির্দিষ্ট টেকনিশিয়ানের রিভিউ ফিল্টার করা
   const technicianReviews = useMemo(() => {
     if (!reviewsRes?.data || !service?.technician?.id) return []
     return reviewsRes.data.filter((rev: IReview) => rev.technicianId === service.technician?.id)
   }, [reviewsRes, service])
 
-  // ৩. বুকিং সাবমিট লজিক (তোমার ব্যাকএন্ডের IBookingRequest অনুযায়ী)
   const handleBookNow = async () => {
     if (!user) {
       toast.error("Please login to book a service")
@@ -113,8 +108,8 @@ export default function ServiceDetailsPage() {
 
     const bookingData = {
       serviceId: serviceId,
-      date: formattedDate,  // স্ট্রিং ফরম্যাট "2026-08-10"
-      time: selectedTime,   // স্ট্রিং ফরম্যাট "10:00 AM"
+      date: formattedDate,  
+      time: selectedTime,  
     };
 
     try {

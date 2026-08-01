@@ -51,7 +51,7 @@ export default function Dashboard({ userRole = "customer" }: DashboardProps) {
               {!user && "Loading your dashboard..."}
             </h1>
 
-            <OverviewCards />
+            {/* <OverviewCards /> */}
           </section>
 
           {/* Bookings/Requests Table */}

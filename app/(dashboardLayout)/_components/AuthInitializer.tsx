@@ -1,14 +1,24 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { setUser } from "@/app/redux/features/authSlice";
 
+interface IUser {
+  id: string;
+  name: string;
+  email: string;
+  role: 'CUSTOMER' | 'TECHNICIAN' | 'ADMIN';
+}
+
+interface AuthInitializerProps {
+  user: IUser | null;
+}
+
 export default function AuthInitializer({
   user,
 }: {
-  user: any;
+  user: AuthInitializerProps;
 }) {
   const dispatch = useDispatch();
 

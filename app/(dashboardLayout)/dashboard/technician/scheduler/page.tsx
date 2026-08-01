@@ -11,7 +11,6 @@ import { cn } from '@/lib/utils'
 import { useUpdateAvailabilityMutation, useGetTechProfileQuery } from "@/app/redux/api/technicianApi"
 import { toast } from "sonner"
 
-// ডিফল্ট টাইম স্লট
 const initialTimeSlots = [
   { time: '09:00 AM', available: true },
   { time: '10:00 AM', available: true },
@@ -27,46 +26,37 @@ export default function TechnicianScheduler() {
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date())
   const [slots, setSlots] = useState(initialTimeSlots)
   
-  // ১. এপিআই হুকস
   const [updateAvailability, { isLoading: isSaving }] = useUpdateAvailabilityMutation()
   const { data: profileRes } = useGetTechProfileQuery()
 
-  // ২. প্রোফাইল থেকে আগের শিডিউল লোড করা (ঐচ্ছিক)
-// ২. প্রোফাইল থেকে আগের শিডিউল লোড করা (টাইপ-সেফ ভার্সন)
+
 useEffect(() => {
-  // ডাটাবেস থেকে আসা প্রোফাইল ডাটাটি আগে একটি ভেরিয়েবলে নাও
   const rawData = profileRes?.data;
   
-  // এখানে টাইপ কাস্টিং করে দাও যাতে টিএস কনফিউজ না হয়
   const techProfile = (rawData?.bio ? rawData : (rawData as any)?.technicianProfile);
 
   if (techProfile?.availability) {
     const savedAvailability = techProfile.availability as string;
     
-    // ঐচ্ছিক: যদি তুমি চাও ডাটাবেসে যা সেভ আছে তা এখানে লোড হবে
-    // তবে এটি করতে হলে স্ট্রিং ভেঙে স্লট আপডেট করার লজিক লাগবে।
-    // আপাতত এরর দূর করার জন্য এই চেকটিই যথেষ্ট।
     console.log("Current availability in DB:", savedAvailability);
   }
 }, [profileRes]);
 
-  // ৩. স্লট টগল করার ফাংশন
   const toggleSlot = (index: number) => {
     const newSlots = [...slots]
     newSlots[index].available = !newSlots[index].available
     setSlots(newSlots)
   }
 
-  // ৪. শিডিউল সেভ করার ফাংশন
   const handleSaveSchedule = async () => {
-    // স্লটগুলোকে একটি সুন্দর স্ট্রিংয়ে রূপান্তর (যেমন: "09:00 AM, 10:00 AM")
+  
     const availableSlots = slots
       .filter(s => s.available)
       .map(s => s.time)
       .join(", ")
 
     const payload = {
-      availability: availableSlots // তোমার ব্যাকএন্ড এই ফরম্যাটে ডাটা চায়
+      availability: availableSlots 
     }
 
     try {
@@ -85,7 +75,6 @@ useEffect(() => {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* বাম পাশ: ক্যালেন্ডার */}
         <Card className="lg:col-span-1 border-0 shadow-md rounded-2xl overflow-hidden">
           <CardHeader className="bg-gray-50/50 border-b">
             <CardTitle className="text-sm font-bold uppercase tracking-wider text-gray-500">Select Date</CardTitle>
@@ -101,7 +90,6 @@ useEffect(() => {
           </CardContent>
         </Card>
 
-        {/* ডান পাশ: টাইম স্লট পিকার */}
         <Card className="lg:col-span-2 border-0 shadow-lg rounded-2xl overflow-hidden bg-white">
           <CardHeader className="flex flex-row items-center justify-between border-b bg-gray-50/50 py-5 px-8">
             <div>

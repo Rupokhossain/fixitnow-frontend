@@ -32,7 +32,7 @@ import { RootState } from "@/app/redux/store"
 import { useCreateBookingMutation } from "@/app/redux/api/bookingApi"
 import { useGetServicesQuery } from "@/app/redux/api/baseApi"
 
-// --- TypeScript Interfaces ---
+
 interface ICategory {
   id: string
   name: string
@@ -79,63 +79,55 @@ export default function ServiceDetailsPage() {
   const router = useRouter()
   const serviceId = params.id as string
 
-  // ১. রেডক্স থেকে ইউজার ডাটা নেওয়া
   const user = useSelector((state: RootState) => state.auth.user)
 
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date())
   const [selectedTime, setSelectedTime] = useState<string | null>(null)
 
-  // ২. এপিআই হুকস
   const { data: servicesData, isLoading: isServicesLoading } =
     useGetServicesQuery({})
   const [createBooking, { isLoading: isBookingLoading }] =
     useCreateBookingMutation()
 
-  // নির্দিষ্ট সার্ভিস খুঁজে বের করা
   const service = servicesData?.data?.find(
     (s: IService) => s.id === serviceId
   ) as IService | undefined
 
-  // ৩. বুকিং সাবমিট লজিক
-const handleBookNow = async () => {
-  if (!user) {
-    toast.error("Please login to book a service")
-    router.push(`/auth/login?redirectTo=/services/${serviceId}`)
-    return
+  const handleBookNow = async () => {
+    if (!user) {
+      toast.error("Please login to book a service")
+      router.push(`/auth/login?redirectTo=/services/${serviceId}`)
+      return
+    }
+
+    if (!selectedDate || !selectedTime) {
+      toast.error("Please select both date and time")
+      return
+    }
+
+    const year = selectedDate.getFullYear()
+    const month = String(selectedDate.getMonth() + 1).padStart(2, "0")
+    const day = String(selectedDate.getDate()).padStart(2, "0")
+    const formattedDate = `${year}-${month}-${day}`
+
+    const bookingData = {
+      serviceId: serviceId,
+      date: formattedDate,
+      time: selectedTime,
+    }
+
+    console.log("Sending Final Payload:", bookingData)
+
+    try {
+      await createBooking(bookingData).unwrap()
+      toast.success("Booking requested successfully!")
+
+      router.push("/dashboard/customer/bookings")
+    } catch (err: any) {
+      console.error("Booking Error:", err)
+      toast.error(err?.data?.message || "Invalid Date or Time format!")
+    }
   }
-
-  if (!selectedDate || !selectedTime) {
-    toast.error("Please select both date and time")
-    return
-  }
-
-  // ১. তারিখ ফরম্যাট করো: YYYY-MM-DD (ব্যাকএন্ডের জন্য)
-  const year = selectedDate.getFullYear();
-  const month = String(selectedDate.getMonth() + 1).padStart(2, '0');
-  const day = String(selectedDate.getDate()).padStart(2, '0');
-  const formattedDate = `${year}-${month}-${day}`;
-
-  // ২. প্লেওড তৈরি (ঠিক যেভাবে তোমার ব্যাকএন্ডের IBookingRequest চাচ্ছে)
-  const bookingData = {
-    serviceId: serviceId, // এপিআই থেকে আসা আইডি
-    date: formattedDate,  // স্ট্রিং ফরম্যাট "2026-08-10"
-    time: selectedTime,   // স্ট্রিং ফরম্যাট "10:00 AM"
-  };
-
-  console.log("Sending Final Payload:", bookingData);
-
-  try {
-    // ৩. রিকোয়েস্ট পাঠানো
-    await createBooking(bookingData).unwrap();
-    toast.success("Booking requested successfully!");
-    
-    // ৪. সফল হলে ড্যাশবোর্ডের বুকিং লিস্টে নিয়ে যাও
-    router.push("/dashboard/customer/bookings");
-  } catch (err: any) {
-    console.error("Booking Error:", err);
-    toast.error(err?.data?.message || "Invalid Date or Time format!");
-  }
-};
 
   if (isServicesLoading)
     return (
@@ -313,7 +305,6 @@ const handleBookNow = async () => {
                   {/* --- ROLE BASED RENDERING --- */}
                   {user &&
                   (user.role === "TECHNICIAN" || user.role === "ADMIN") ? (
-                    /* ১. টেকনিশিয়ান বা অ্যাডমিন হলে রেস্ট্রিকশন দেখাবে */
                     <div className="animate-in rounded-2xl border-2 border-dashed border-amber-200 bg-amber-50 p-6 text-center duration-500 fade-in slide-in-from-bottom-2">
                       <div className="mb-3 flex justify-center">
                         <Lock className="h-8 w-8 text-amber-600" />
@@ -327,7 +318,6 @@ const handleBookNow = async () => {
                       </p>
                     </div>
                   ) : (
-                    /* ২. গেস্ট বা কাস্টমার হলে প্রাইস এবং বাটন দেখাবে */
                     <>
                       <div className="mb-6 flex items-center justify-between px-1">
                         <span className="font-bold text-gray-500">
@@ -339,7 +329,6 @@ const handleBookNow = async () => {
                       </div>
 
                       {!user ? (
-                        /* যদি লগইন না থাকে - লগইন বাটন */
                         <Link
                           href={`/auth/login?redirectTo=/services/${serviceId}`}
                           className="w-full"
@@ -349,7 +338,6 @@ const handleBookNow = async () => {
                           </Button>
                         </Link>
                       ) : (
-                        /* যদি কাস্টমার হয় - বুকিং বাটন */
                         <Button
                           className="h-14 w-full rounded-2xl bg-primary text-lg font-black shadow-xl transition-all hover:bg-primary/90 active:scale-95"
                           onClick={handleBookNow}

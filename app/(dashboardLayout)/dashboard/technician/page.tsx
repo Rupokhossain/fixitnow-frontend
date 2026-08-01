@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-"use client";
+"use client"
 
 import {
   useGetTechProfileQuery,
   useGetTechAvailabilityQuery,
   useGetTechBookingsQuery,
-} from "@/app/redux/api/technicianApi";
-import OverviewCards from "../../_components/overview-card";
+} from "@/app/redux/api/technicianApi"
+import OverviewCards from "../../_components/overview-card"
 import {
   Loader2,
   User as UserIcon,
@@ -14,35 +14,35 @@ import {
   MapPin,
   Briefcase,
   Info,
-} from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { useSelector } from "react-redux";
-import { RootState } from "@/app/redux/store";
+} from "lucide-react"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Badge } from "@/components/ui/badge"
+import { useSelector } from "react-redux"
+import { RootState } from "@/app/redux/store"
 
 export default function TechnicianOverview() {
-  const user = useSelector((state: RootState) => state.auth.user);
+  const user = useSelector((state: RootState) => state.auth.user)
 
   const { data: profileRes, isLoading: profileLoading } =
-    useGetTechProfileQuery();
+    useGetTechProfileQuery()
 
   const { data: availabilityRes, isLoading: availabilityLoading } =
-    useGetTechAvailabilityQuery();
+    useGetTechAvailabilityQuery()
 
   const { data: bookingsRes, isLoading: bookingsLoading } =
-    useGetTechBookingsQuery();
+    useGetTechBookingsQuery()
 
   if (profileLoading || availabilityLoading || bookingsLoading) {
     return (
       <div className="flex h-[70vh] items-center justify-center">
         <Loader2 className="h-10 w-10 animate-spin text-primary" />
       </div>
-    );
+    )
   }
 
-  const techProfile = profileRes?.data;
-  const availability = availabilityRes?.data;
-  const bookings = bookingsRes?.data ?? [];
+  const techProfile = profileRes?.data
+  const availability = availabilityRes?.data
+  const bookings = bookingsRes?.data ?? []
 
   const stats = {
     totalUsers: bookings.filter((b) =>
@@ -58,10 +58,10 @@ export default function TechnicianOverview() {
     ),
 
     activeTechnicians: 1,
-  };
+  }
 
   return (
-    <div className="space-y-8 animate-in fade-in duration-700">
+    <div className="animate-in space-y-8 duration-700 fade-in">
       <div>
         <h1 className="text-3xl font-black tracking-tight">
           Technician Dashboard
@@ -93,7 +93,7 @@ export default function TechnicianOverview() {
             {techProfile ? (
               <div className="space-y-6">
                 <div>
-                  <p className="mb-2 text-[10px] font-black uppercase tracking-widest text-gray-400">
+                  <p className="mb-2 text-[10px] font-black tracking-widest text-gray-400 uppercase">
                     About Me
                   </p>
 
@@ -122,9 +122,7 @@ export default function TechnicianOverview() {
               <div className="rounded-xl border border-dashed border-orange-300 bg-orange-50 py-8 text-center">
                 <Info className="mx-auto mb-3 text-orange-500" />
 
-                <p className="font-bold text-orange-700">
-                  Profile Incomplete
-                </p>
+                <p className="font-bold text-orange-700">Profile Incomplete</p>
 
                 <p className="text-xs text-orange-600">
                   Please update your technician profile.
@@ -147,14 +145,14 @@ export default function TechnicianOverview() {
 
           <CardContent className="flex min-h-[160px] items-center">
             <div className="flex items-center gap-5">
-              <div className="h-5 w-5 rounded-full bg-green-500 animate-pulse" />
+              <div className="h-5 w-5 animate-pulse rounded-full bg-green-500" />
 
               <div>
                 <h2 className="text-xl font-bold">
                   {availability?.availability ?? "Offline"}
                 </h2>
 
-                <p className="text-xs uppercase tracking-widest text-gray-400">
+                <p className="text-xs tracking-widest text-gray-400 uppercase">
                   Current Schedule
                 </p>
               </div>
@@ -163,5 +161,5 @@ export default function TechnicianOverview() {
         </Card>
       </div>
     </div>
-  );
+  )
 }

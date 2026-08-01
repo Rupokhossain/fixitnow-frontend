@@ -75,3 +75,10 @@ export interface IAvailabilityResponse {
     availability: string;
   };
 }
+
+export interface ICalculatedStats {
+  totalUsers: number;
+  totalBookings: number;
+  totalRevenue: number;
+  activeTechnicians: number;
+}

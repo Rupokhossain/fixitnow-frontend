@@ -60,16 +60,16 @@ const technicianApi = baseApi.injectEndpoints({
 
     updateAvailability: builder.mutation<IAvailabilityResponse, { availability: string }>({
   query: (data) => ({
-    url: "/api/technician/availability", // তোমার ব্যাকএন্ড এন্ডপয়েন্ট (PUT বা PATCH চেক করে নিও)
+    url: "/api/technician/availability", 
     method: "PUT", 
     body: data,
   }),
-  invalidatesTags: ["Users", "Bookings"], // এটি করলে ড্যাশবোর্ড কার্ড অটো আপডেট হবে
+  invalidatesTags: ["Users", "Bookings"], 
 }),
-// reviewApi.ts এর ভেতরে এটি যোগ করো
+
 getAllReviews: builder.query({
-  query: () => "/api/reviews", // তোমার ব্যাকএন্ডের GET /reviews এন্ডপয়েন্ট অনুযায়ী
-  providesTags: ["Users"], // ট্যাগটি Users রাখো যাতে প্রোফাইল আপডেটের সাথে মিলে যায়
+  query: () => "/api/reviews", 
+  providesTags: ["Users"], 
 }),
 
     

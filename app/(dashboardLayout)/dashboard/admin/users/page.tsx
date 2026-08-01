@@ -29,96 +29,9 @@ interface User {
   status: "ACTIVE" | "BANNED"
 }
 
-// const initialUsers: User[] = [
-//   {
-//     id: '1',
-//     name: 'Sarah Johnson',
-//     email: 'sarah.johnson@example.com',
-//     role: 'customer',
-//     status: 'active',
-//   },
-//   {
-//     id: '2',
-//     name: 'Mike Rodriguez',
-//     email: 'mike.rodriguez@example.com',
-//     role: 'technician',
-//     status: 'active',
-//   },
-//   {
-//     id: '3',
-//     name: 'Emma Davis',
-//     email: 'emma.davis@example.com',
-//     role: 'customer',
-//     status: 'active',
-//   },
-//   {
-//     id: '4',
-//     name: 'John Chen',
-//     email: 'john.chen@example.com',
-//     role: 'technician',
-//     status: 'banned',
-//   },
-//   {
-//     id: '5',
-//     name: 'Lisa Anderson',
-//     email: 'lisa.anderson@example.com',
-//     role: 'customer',
-//     status: 'active',
-//   },
-//   {
-//     id: '6',
-//     name: 'David Martinez',
-//     email: 'david.martinez@example.com',
-//     role: 'technician',
-//     status: 'active',
-//   },
-//   {
-//     id: '7',
-//     name: 'Rachel Brown',
-//     email: 'rachel.brown@example.com',
-//     role: 'customer',
-//     status: 'banned',
-//   },
-//   {
-//     id: '8',
-//     name: 'James Wilson',
-//     email: 'james.wilson@example.com',
-//     role: 'technician',
-//     status: 'active',
-//   },
-// ]
 
 export default function UserManagement() {
-  // const [users, setUsers] = useState<User[]>(initialUsers)
-  // const [searchQuery, setSearchQuery] = useState('')
 
-  // const filteredUsers = useMemo(() => {
-  //   return users.filter((user) =>
-  //     user.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-  //     user.email.toLowerCase().includes(searchQuery.toLowerCase())
-  //   )
-  // }, [users, searchQuery])
-
-  // const handleToggleBan = (userId: string) => {
-  //   setUsers((prevUsers) =>
-  //     prevUsers.map((user) =>
-  //       user.id === userId
-  //         ? {
-  //             ...user,
-  //             status: user.status === 'active' ? 'banned' : 'active',
-  //           }
-  //         : user
-  //     )
-  //   )
-  // }
-
-  // const getRoleBadgeVariant = (role: string) => {
-  //   return role === 'technician' ? 'default' : 'secondary'
-  // }
-
-  // const getStatusBadgeVariant = (status: string) => {
-  //   return status === 'active' ? 'default' : 'destructive'
-  // }
 
   const pathname = usePathname()
   const router = useRouter()
@@ -180,18 +93,12 @@ export default function UserManagement() {
         <Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-gray-400" />
         <Input
           placeholder="Search by name or email..."
-          // value={searchQuery}
-          // onChange={(e) => setSearchQuery(e.target.value)}
           defaultValue={searchParams.get("searchTerm") || ""}
           onChange={(e) => handleSearch(e.target.value)}
           className="border-gray-200 bg-white pl-10"
         />
       </div>
 
-      {/* Results Count */}
-      {/* <div className="text-sm text-gray-600">
-        Showing {filteredUsers.length} of {users.length} users
-      </div> */}
 
       {/* Table */}
       <div className="overflow-hidden rounded-lg border border-gray-200 bg-white">
@@ -210,7 +117,7 @@ export default function UserManagement() {
               <TableHead className="font-semibold text-gray-900">
                 Status
               </TableHead>
-              <TableHead className="w-[120px] text-right font-semibold text-gray-900">
+              <TableHead className="w-30 text-right font-semibold text-gray-900">
                 Action
               </TableHead>
             </TableRow>
