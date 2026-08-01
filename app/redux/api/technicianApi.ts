@@ -66,6 +66,11 @@ const technicianApi = baseApi.injectEndpoints({
   }),
   invalidatesTags: ["Users", "Bookings"], // এটি করলে ড্যাশবোর্ড কার্ড অটো আপডেট হবে
 }),
+// reviewApi.ts এর ভেতরে এটি যোগ করো
+getAllReviews: builder.query({
+  query: () => "/reviews", // তোমার ব্যাকএন্ডের GET /reviews এন্ডপয়েন্ট অনুযায়ী
+  providesTags: ["Users"], // ট্যাগটি Users রাখো যাতে প্রোফাইল আপডেটের সাথে মিলে যায়
+}),
     
   }),
 })
@@ -77,5 +82,6 @@ export const {
   useUpdateTechBookingMutation,
   useGetSingleTechnicianQuery,
   useUpdateTechProfileMutation,
-  useUpdateAvailabilityMutation
+  useUpdateAvailabilityMutation,
+  useGetAllReviewsQuery 
 } = technicianApi
