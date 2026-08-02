@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils"
 import { Toaster } from "sonner"
 import { StoreProvider } from "./providers/StoreProvider"
 import { getLoggedInUserAction } from "./(authLayout)/auth/_actions/authActions"
+import { cookies } from "next/headers"
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" })
 
@@ -19,8 +20,10 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode
 }>) {
+  const cookieStore = await cookies()
+  const token = cookieStore.get("accessToken")?.value || null
 
-  const user = await getLoggedInUserAction();
+  const user = await getLoggedInUserAction()
   return (
     <html
       lang="en"
@@ -34,7 +37,7 @@ export default async function RootLayout({
     >
       <body>
         <div>
-          <StoreProvider initialUser={user}>
+          <StoreProvider initialUser={user} initialToken={token}>
             {children}
             <Toaster position="top-center" richColors />
           </StoreProvider>

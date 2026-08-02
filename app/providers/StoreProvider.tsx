@@ -2,28 +2,28 @@
 
 import { Provider } from "react-redux"
 import { store } from "@/app/redux/store"
-import { setUser } from "@/app/redux/features/authSlice"
+import { setUser, IUser } from "@/app/redux/features/authSlice"
 import { useEffect } from "react"
-
-interface IUser {
-  id: string;
-  name: string;
-  email: string;
-  role: string;
-}
-
 interface StoreProviderProps {
   children: React.ReactNode;
   initialUser: IUser | null; 
+  initialToken: string | null; 
 }
 
-export const StoreProvider = ({ children, initialUser }: StoreProviderProps) => {
+export const StoreProvider = ({ 
+  children, 
+  initialUser, 
+  initialToken 
+}: StoreProviderProps) => {
   
   useEffect(() => {
-    if (initialUser) {
-      store.dispatch(setUser(initialUser))
+    if (initialToken) {
+      store.dispatch(setUser({ 
+        user: initialUser, 
+        token: initialToken 
+      }))
     }
-  }, [initialUser])
+  }, [initialUser, initialToken])
 
   return <Provider store={store}>{children}</Provider>
 }
