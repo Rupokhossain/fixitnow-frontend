@@ -1,4 +1,3 @@
-
 "use server"
 
 import { cookies } from "next/headers"
@@ -12,27 +11,27 @@ const loginSchema = z.object({
 })
 
 type LoginState = {
-  success: true;
-  statusCode: number;
-  message: string;
+  success: true
+  statusCode: number
+  message: string
   data: {
-    accessToken: string;
-    refreshToken: string;
-  };
-};
+    accessToken: string
+    refreshToken: string
+  }
+}
 
 export const loginAction = async (
   redirectTo: string,
   prevState: LoginState,
   formData: FormData
 ) => {
-  
+  const isProduction = process.env.NODE_ENV === "production"
+
   const email = formData.get("email")
   const password = formData.get("password")
 
   const payload = { email, password }
   console.log("Payload Received:", payload)
-
 
   const validatedFields = loginSchema.safeParse(payload)
   if (!validatedFields.success) {
@@ -48,6 +47,7 @@ export const loginAction = async (
   const res = await fetch(`${process.env.BACKEND_API_URL}/api/auth/login`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
+    credentials: "include",
     body: JSON.stringify(payload),
   })
 
@@ -60,12 +60,14 @@ export const loginAction = async (
     cookieStore.set("accessToken", result.data.accessToken, {
       httpOnly: true,
       maxAge: 60 * 60 * 24,
-      sameSite: "none",
+      secure: isProduction,
+      sameSite: isProduction ? "none" : "lax",
     })
     cookieStore.set("refreshToken", result.data.refreshToken, {
       httpOnly: true,
       maxAge: 60 * 60 * 24 * 7,
-      sameSite: "none",
+      secure: isProduction,
+      sameSite: isProduction ? "none" : "lax",
     })
 
     const decodedToken = jwt.decode(result.data.accessToken) as JwtPayload
@@ -96,23 +98,21 @@ export const loginAction = async (
   }
 }
 
-
-
 export const getLoggedInUserAction = async () => {
-  const cookieStore = await cookies();
-  const token = cookieStore.get("accessToken")?.value;
+  const cookieStore = await cookies()
+  const token = cookieStore.get("accessToken")?.value
 
-  if (!token) return null;
+  if (!token) return null
 
   try {
-    const decoded = jwt.decode(token) as JwtPayload;
+    const decoded = jwt.decode(token) as JwtPayload
     return {
       id: decoded.id,
       name: decoded.name,
       email: decoded.email,
       role: decoded.role,
-    };
+    }
   } catch (error) {
-    return null;
+    return null
   }
 }

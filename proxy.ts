@@ -9,7 +9,10 @@ const AUTH_ROUTES = ["/auth/login", "/auth/register"]
 const PUBLIC_ROUTES = ["/", "/services"]
 
 export async function proxy(request: NextRequest) {
+  const isProduction = process.env.NODE_ENV === "production"
+
   const pathname = request.nextUrl.pathname
+  const response = NextResponse.next()
 
   const cookieStore = await cookies()
 
@@ -38,16 +41,19 @@ export async function proxy(request: NextRequest) {
 
       accessToken = newAccessToken
 
-      cookieStore.set("accessToken", newAccessToken, {
+      response.cookies.set("accessToken", newAccessToken, {
         httpOnly: true,
         maxAge: 60 * 60 * 24,
-        sameSite: "none",
+        secure: isProduction,
+        sameSite: isProduction ? "none" : "lax",
       })
 
       decodedAccessToken = jwtUtils.verifiedToken(
         accessToken!,
         process.env.JWT_ACCESS_SECRET as string
       )
+
+      return response
     }
   }
 
@@ -58,7 +64,7 @@ export async function proxy(request: NextRequest) {
   }
 
   if (!decodedAccessToken?.success) {
-    cookieStore.delete("accessToken")
+    response.cookies.delete("accessToken")
   }
 
   if (accessToken && AUTH_ROUTES.includes(pathname)) {
@@ -102,7 +108,7 @@ export async function proxy(request: NextRequest) {
     return NextResponse.redirect(new URL("/not-found", request.url))
   }
 
-  return NextResponse.next()
+  return response
 }
 
 export const config = {

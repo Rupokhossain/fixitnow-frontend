@@ -18,15 +18,26 @@ export const getRefreshToken = async () => {
     `${process.env.BACKEND_API_URL}/api/auth/refresh-token`,
     {
       method: "POST",
+      credentials: "include",
       headers: {
         Cookie: `refreshToken=${refreshToken}`,
       },
-      cache: "no-cache",
+      cache: "no-store",
     }
-  );
+  )
 
-  const result = await res.json();
+  const result = await res.json()
 
-  return result;
+  if (result.success) {
+    const cookieStore = await cookies()
 
+    cookieStore.set("accessToken", result.data.accessToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+      maxAge: 60 * 60 * 24,
+    })
+  }
+
+  return result
 }
