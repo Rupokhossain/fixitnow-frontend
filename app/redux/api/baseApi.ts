@@ -1,19 +1,19 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { RootState } from "../store";
+import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react"
+import { RootState } from "../store"
 
 export const baseApi = createApi({
   reducerPath: "baseApi",
   baseQuery: fetchBaseQuery({
     baseUrl: process.env.NEXT_PUBLIC_BACKEND_API_URL,
     prepareHeaders: (headers, { getState }) => {
-      const token = (getState() as RootState).auth.token;
+      const token = (getState() as RootState).auth.token
 
       if (token) {
-        headers.set("authorization", `${token}`); 
+        headers.set("authorization", `${token}`)
       }
-      return headers;
+      return headers
     },
-    credentials: "include", 
+    credentials: "include",
   }),
   tagTypes: ["Services", "Bookings", "Users", "Categories"],
   endpoints: (builder) => ({
@@ -22,6 +22,6 @@ export const baseApi = createApi({
       providesTags: ["Services"],
     }),
   }),
-});
+})
 
-export const { useGetServicesQuery } = baseApi;
+export const { useGetServicesQuery } = baseApi

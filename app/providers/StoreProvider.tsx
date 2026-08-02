@@ -16,6 +16,7 @@ export const StoreProvider = ({
   initialToken 
 }: StoreProviderProps) => {
   
+  
   useEffect(() => {
     if (initialToken) {
       store.dispatch(setUser({ 
