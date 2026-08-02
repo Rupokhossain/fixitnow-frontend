@@ -41,7 +41,7 @@ export async function proxy(request: NextRequest) {
       cookieStore.set("accessToken", newAccessToken, {
         httpOnly: true,
         maxAge: 60 * 60 * 24,
-        sameSite: "lax",
+        sameSite: "none",
       })
 
       decodedAccessToken = jwtUtils.verifiedToken(

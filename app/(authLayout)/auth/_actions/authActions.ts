@@ -60,12 +60,12 @@ export const loginAction = async (
     cookieStore.set("accessToken", result.data.accessToken, {
       httpOnly: true,
       maxAge: 60 * 60 * 24,
-      sameSite: "lax",
+      sameSite: "none",
     })
     cookieStore.set("refreshToken", result.data.refreshToken, {
       httpOnly: true,
       maxAge: 60 * 60 * 24 * 7,
-      sameSite: "lax",
+      sameSite: "none",
     })
 
     const decodedToken = jwt.decode(result.data.accessToken) as JwtPayload
