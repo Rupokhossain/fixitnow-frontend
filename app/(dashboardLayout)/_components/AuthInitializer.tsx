@@ -13,20 +13,20 @@ interface IUser {
 
 interface AuthInitializerProps {
   user: IUser | null;
+  token: string | null
 }
 
 export default function AuthInitializer({
   user,
-}: {
-  user: AuthInitializerProps;
-}) {
+  token
+}: AuthInitializerProps) {
   const dispatch = useDispatch();
 
   useEffect(() => {
     if (user) {
-      dispatch(setUser(user));
+      dispatch(setUser({user, token}));
     }
-  }, [dispatch, user]);
+  }, [dispatch, user, token]);
 
   return null;
 }

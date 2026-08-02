@@ -24,6 +24,7 @@ export default async function RootLayout({
   const token = cookieStore.get("accessToken")?.value || null
 
   const user = await getLoggedInUserAction()
+  
   return (
     <html
       lang="en"

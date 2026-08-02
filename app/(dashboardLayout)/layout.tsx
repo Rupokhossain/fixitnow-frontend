@@ -1,14 +1,9 @@
-import { getMe } from "@/service/getMe"
 import { Header } from "./_components/header"
 import { Sidebar } from "./_components/sidebar"
-import AuthInitializer from "./_components/AuthInitializer"
 
 const DashboardLayout = async ({ children }: { children: React.ReactNode }) => {
-  const user = await getMe()
-
   return (
     <div className="min-h-screen bg-gray-50">
-      <AuthInitializer user={user} />
       <Sidebar />
 
       {/* Header */}
