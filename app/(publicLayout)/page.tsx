@@ -6,6 +6,7 @@ import ServiceCard from "@/components/shared/service-card"
 import { Button } from "@/components/ui/button"
 import { CheckCircle2, Clock, Shield, Loader2 } from "lucide-react"
 import { useGetServicesQuery } from "../redux/api/baseApi"
+import { ServiceSkeleton } from "@/components/shared/service-skeleton"
 
 interface IProvider {
   name: string;
@@ -64,12 +65,7 @@ export default function Page() {
           {/* Service Cards Grid */}
 
           {isLoading ? (
-            <div className="flex flex-col items-center justify-center py-20">
-              <Loader2 className="h-10 w-10 animate-spin text-primary" />
-              <p className="mt-4 text-muted-foreground">
-                Fetching latest services...
-              </p>
-            </div>
+              <ServiceSkeleton/>
           ) : isError ? (
             <div className="py-20 text-center text-red-500">
               Something went wrong while fetching services.

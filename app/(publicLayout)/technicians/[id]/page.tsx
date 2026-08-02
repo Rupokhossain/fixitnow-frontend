@@ -30,7 +30,6 @@ import {
 
 import { cn } from "@/lib/utils"
 
-// --- TypeScript Interfaces ---
 interface ITechnicianProfile {
   bio?: string
   skills?: string

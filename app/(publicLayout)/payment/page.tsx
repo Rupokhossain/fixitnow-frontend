@@ -8,7 +8,6 @@ import Link from "next/link"
 
 export default function PaymentStatusPage() {
   const searchParams = useSearchParams()
-  // URL থেকে success ভ্যালু চেক করা (?success=true)
   const isSuccess = searchParams.get("success") === "true"
 
   return (
