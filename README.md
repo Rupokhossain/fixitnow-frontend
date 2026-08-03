@@ -112,8 +112,7 @@ Built with **Next.js 15**, **Node.js**, **Express.js**, **Prisma ORM**, **Postgr
 ### Frontend
 
 ```
-src/
- ├── app/
+app/
  ├── components/
  ├── redux/
  ├── schemas/
