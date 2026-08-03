@@ -24,6 +24,7 @@ import { toast } from "sonner"
 import { IBooking } from "@/lib/types"
 import { createPaymentAction } from "@/app/(dashboardLayout)/_actions/paymentActions"
 import { Badge } from "@/components/ui/badge"
+import DashboardSkeleton from "@/app/(dashboardLayout)/_components/dashboard-skeleton"
 
 export default function PaymentInitiationPage() {
   const params = useParams()
@@ -56,9 +57,7 @@ export default function PaymentInitiationPage() {
 
   if (isFetching) {
     return (
-      <div className="flex h-[70vh] items-center justify-center">
-        <Loader2 className="h-10 w-10 animate-spin text-primary" />
-      </div>
+        <DashboardSkeleton></DashboardSkeleton>
     )
   }
 

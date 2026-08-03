@@ -29,6 +29,7 @@ import {
 } from "lucide-react"
 
 import { cn } from "@/lib/utils"
+import DashboardSkeleton from "@/app/(dashboardLayout)/_components/dashboard-skeleton"
 
 interface ITechnicianProfile {
   bio?: string
@@ -101,7 +102,7 @@ export default function TechnicianPublicProfile() {
     }
   }
 
-  if (isLoading) return <div className="flex h-screen items-center justify-center"><Loader2 className="h-10 w-10 animate-spin text-primary" /></div>
+  if (isLoading) <DashboardSkeleton></DashboardSkeleton>
 
   if (isError || !technician) return (
     <div className="py-20 text-center">

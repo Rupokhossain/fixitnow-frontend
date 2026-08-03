@@ -19,6 +19,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { useSelector } from "react-redux"
 import { RootState } from "@/app/redux/store"
+import DashboardSkeleton from "../../_components/dashboard-skeleton"
 
 export default function TechnicianOverview() {
   const user = useSelector((state: RootState) => state.auth.user)
@@ -33,11 +34,7 @@ export default function TechnicianOverview() {
     useGetTechBookingsQuery()
 
   if (profileLoading || availabilityLoading || bookingsLoading) {
-    return (
-      <div className="flex h-[70vh] items-center justify-center">
-        <Loader2 className="h-10 w-10 animate-spin text-primary" />
-      </div>
-    )
+    return <DashboardSkeleton />
   }
 
   const techProfile = profileRes?.data

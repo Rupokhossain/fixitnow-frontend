@@ -31,6 +31,7 @@ import { RootState } from "@/app/redux/store"
 
 import { useCreateBookingMutation } from "@/app/redux/api/bookingApi"
 import { useGetServicesQuery } from "@/app/redux/api/baseApi"
+import DashboardSkeleton from "@/app/(dashboardLayout)/_components/dashboard-skeleton"
 
 
 interface ICategory {
@@ -116,7 +117,6 @@ export default function ServiceDetailsPage() {
       time: selectedTime,
     }
 
-    console.log("Sending Final Payload:", bookingData)
 
     try {
       await createBooking(bookingData).unwrap()
@@ -131,9 +131,7 @@ export default function ServiceDetailsPage() {
 
   if (isServicesLoading)
     return (
-      <div className="flex h-screen items-center justify-center">
-        <Loader2 className="h-10 w-10 animate-spin text-primary" />
-      </div>
+        <DashboardSkeleton/>
     )
 
   if (!service)

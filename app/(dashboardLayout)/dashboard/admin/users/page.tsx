@@ -20,6 +20,7 @@ import {
 import { toast } from "sonner"
 import { usePathname, useRouter, useSearchParams } from "next/navigation"
 import { useRef } from "react"
+import DashboardSkeleton from "@/app/(dashboardLayout)/_components/dashboard-skeleton"
 
 interface User {
   id: string
@@ -78,9 +79,7 @@ export default function UserManagement() {
 
   if (isLoading)
     return (
-      <div className="flex justify-center py-10">
-        <Loader2 className="h-6 w-6 animate-spin" />
-      </div>
+        <DashboardSkeleton/>
     )
 
   return (

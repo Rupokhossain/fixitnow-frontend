@@ -3,18 +3,15 @@ export const dynamic = "force-dynamic"
 
 import { useGetTechBookingsQuery } from "@/app/redux/api/technicianApi"
 import { BookingsTable } from "../../../_components/bookings-table"
-import { Loader2 } from "lucide-react"
+import DashboardSkeleton from "@/app/(dashboardLayout)/_components/dashboard-skeleton"
 
 export default function TechnicianBookingsPage() {
   const { data, isLoading } = useGetTechBookingsQuery()
   const bookings = data?.data || []
 
-  if (isLoading)
-    return (
-      <div className="flex justify-center py-20">
-        <Loader2 className="animate-spin text-blue-600" />
-      </div>
-    )
+  if (isLoading) {
+    return <DashboardSkeleton />
+  }
 
   return (
     <div className="space-y-6">

@@ -14,6 +14,7 @@ import { toast } from "sonner"
 
 import { categorySchema, CategoryFormValues } from "@/app/schemas/category.schema"
 import { useGetCategoriesQuery, useAddCategoryMutation } from "@/app/redux/api/categoryApi"
+import DashboardSkeleton from "@/app/(dashboardLayout)/_components/dashboard-skeleton"
 
 export default function CategoryManagement() {
   const [searchTerm, setSearchTerm] = useState("")
@@ -48,9 +49,7 @@ export default function CategoryManagement() {
 
   if (isLoading) {
     return (
-      <div className="flex h-64 items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin text-primary" />
-      </div>
+        <DashboardSkeleton></DashboardSkeleton>
     )
   }
 
