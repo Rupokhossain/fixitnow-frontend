@@ -39,7 +39,6 @@ This document outlines the connection between the **Next.js Frontend** and the *
 ## 👑 5. Administrative Controls
 | Feature | Method | API Endpoint | Frontend Page |
 | :--- | :--- | :--- | :--- |
-| Global Stats | `GET` | `/admin/stats` | `dashboard/admin/page.tsx` |
 | Manage Users | `GET` | `/users` | `dashboard/admin/users/page.tsx` |
 | Ban/Unban User | `PATCH` | `/users/:id/status` | `dashboard/admin/users/page.tsx` |
 | Create Category | `POST` | `/categories` | `dashboard/admin/categories/page.tsx` |
