@@ -1,4 +1,8 @@
+export const dynamic = "force-dynamic";
+
+
 import { BookingsTable } from "../../../_components/bookings-table";
+
 
 export default function CustomerBookingsPage() {
   return (

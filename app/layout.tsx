@@ -1,3 +1,7 @@
+
+export const dynamic = "force-dynamic";
+
+
 import { Geist_Mono, Inter } from "next/font/google"
 
 import "./globals.css"
@@ -7,6 +11,7 @@ import { Toaster } from "sonner"
 import { StoreProvider } from "./providers/StoreProvider"
 import { getLoggedInUserAction } from "./(authLayout)/auth/_actions/authActions"
 import { cookies } from "next/headers"
+
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" })
 
