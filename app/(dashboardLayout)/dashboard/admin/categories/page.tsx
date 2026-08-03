@@ -56,7 +56,7 @@ export default function CategoryManagement() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row gap-4 items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold text-gray-900">Categories</h1>
           <p className="mt-1 text-gray-600">View and create service categories</p>
@@ -64,7 +64,7 @@ export default function CategoryManagement() {
 
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogTrigger asChild>
-            <Button className="gap-2 bg-blue-600 hover:bg-blue-700">
+            <Button className="py-2 bg-blue-600 hover:bg-blue-700">
               <Plus size={18} /> Create Category
             </Button>
           </DialogTrigger>

@@ -29,10 +29,7 @@ interface User {
   status: "ACTIVE" | "BANNED"
 }
 
-
 export default function UserManagement() {
-
-
   const pathname = usePathname()
   const router = useRouter()
   const searchParams = useSearchParams()
@@ -82,54 +79,65 @@ export default function UserManagement() {
   if (isLoading)
     return (
       <div className="flex justify-center py-10">
-        <Loader2 className="animate-spin" />
+        <Loader2 className="h-6 w-6 animate-spin" />
       </div>
     )
 
   return (
     <div className="space-y-4">
-      {/* Search Bar */}
-      <div className="relative">
+      {/* Search */}
+      <div className="relative w-full">
         <Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-gray-400" />
         <Input
           placeholder="Search by name or email..."
-          defaultValue={searchParams.get("searchTerm") || ""}
+          defaultValue={searchTerm}
           onChange={(e) => handleSearch(e.target.value)}
-          className="border-gray-200 bg-white pl-10"
+          className="w-full border-gray-200 bg-white pl-10"
         />
       </div>
 
-
       {/* Table */}
-      <div className="overflow-hidden rounded-lg border border-gray-200 bg-white">
-        <Table className="table-fixed">
+      <div className="overflow-x-auto rounded-lg border border-gray-200 bg-white">
+        <Table className="min-w-[750px]">
           <TableHeader className="bg-gray-50">
             <TableRow className="border-gray-200 hover:bg-gray-50">
               <TableHead className="font-semibold text-gray-900">
                 Name
               </TableHead>
+
               <TableHead className="font-semibold text-gray-900">
                 Email
               </TableHead>
+
               <TableHead className="font-semibold text-gray-900">
                 Role
               </TableHead>
+
               <TableHead className="font-semibold text-gray-900">
                 Status
               </TableHead>
-              <TableHead className="w-30 text-right font-semibold text-gray-900">
+
+              <TableHead className="w-[120px] text-right font-semibold text-gray-900">
                 Action
               </TableHead>
             </TableRow>
           </TableHeader>
+
           <TableBody>
             {users.map((user: User) => (
               <TableRow key={user.id}>
-                <TableCell className="font-medium">{user.name}</TableCell>
-                <TableCell>{user.email}</TableCell>
+                <TableCell className="font-medium whitespace-nowrap">
+                  {user.name}
+                </TableCell>
+
+                <TableCell className="whitespace-nowrap">
+                  {user.email}
+                </TableCell>
+
                 <TableCell>
                   <Badge variant="outline">{user.role}</Badge>
                 </TableCell>
+
                 <TableCell>
                   <Badge
                     className={
@@ -141,20 +149,21 @@ export default function UserManagement() {
                     {user.status}
                   </Badge>
                 </TableCell>
-                <TableCell className="text-right">
-                  <div className="flex justify-end">
-                    <Button
-                      className="w-24 focus:outline-none focus-visible:ring-0 focus-visible:ring-offset-0"
-                      size="sm"
-                      variant={
-                        user.status === "ACTIVE" ? "destructive" : "default"
-                      }
-                      onClick={() => handleToggleStatus(user.id, user.status)}
-                      disabled={isUpdating}
-                    >
-                      {user.status === "ACTIVE" ? "Ban" : "Unban"}
-                    </Button>
-                  </div>
+
+                <TableCell className="text-right whitespace-nowrap">
+                  <Button
+                    size="sm"
+                    className="w-24 focus:outline-none focus-visible:ring-0 focus-visible:ring-offset-0"
+                    variant={
+                      user.status === "ACTIVE" ? "destructive" : "default"
+                    }
+                    onClick={() =>
+                      handleToggleStatus(user.id, user.status)
+                    }
+                    disabled={isUpdating}
+                  >
+                    {user.status === "ACTIVE" ? "Ban" : "Unban"}
+                  </Button>
                 </TableCell>
               </TableRow>
             ))}

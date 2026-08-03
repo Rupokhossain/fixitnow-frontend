@@ -40,7 +40,7 @@ export function Sidebar() {
     ...(role === "technician"
       ? [
           {
-            label: "Service Requests",
+            label: "Service Profile",
             href: `${basePath}/my-services`,
             icon: ClipboardList,
           },

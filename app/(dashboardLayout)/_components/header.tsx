@@ -26,7 +26,7 @@ export function Header() {
   const user = useSelector((state: RootState) => state.auth.user)
 
   return (
-    <header className="fixed top-0 right-0 left-64 z-40 flex h-20 items-center justify-between border-b border-gray-200 bg-white px-8 md:left-0 lg:left-64">
+    <header className="fixed top-0 right-0 left-0 z-40 flex h-20 items-center justify-between sm:border-b border-gray-200 md:bg-white md:px-8 md:left-0 lg:left-64">
       {/* Right Section: Notifications & Profile */}
       <div className="ml-auto flex items-center gap-4">
         {/* Profile Dropdown */}

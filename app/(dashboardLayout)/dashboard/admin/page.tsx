@@ -39,7 +39,7 @@ const AdminPage = () => {
   return (
     <div className="space-y-8 p-4 md:p-0">
       <div>
-        <h1 className="text-3xl leading-tight font-extrabold text-gray-900 tracking-tight">
+        <h1 className="sm:text-3xl text-2xl leading-tight font-extrabold text-gray-900 tracking-tight">
           Admin Dashboard
         </h1>
         <p className="mt-1 text-gray-500 font-medium">

@@ -3,7 +3,6 @@
 import { useState } from "react"
 import { Sidebar } from "./sidebar"
 import { BookingsTable } from "./bookings-table"
-import OverviewCards from "./overview-card"
 import { Header } from "./header"
 import { useSelector } from "react-redux"
 import { RootState } from "@/app/redux/store"

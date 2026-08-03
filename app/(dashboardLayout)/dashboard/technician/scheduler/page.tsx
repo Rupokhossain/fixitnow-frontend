@@ -91,7 +91,7 @@ useEffect(() => {
         </Card>
 
         <Card className="lg:col-span-2 border-0 shadow-lg rounded-2xl overflow-hidden bg-white">
-          <CardHeader className="flex flex-row items-center justify-between border-b bg-gray-50/50 py-5 px-8">
+          <CardHeader className="flex flex-col md:flex-row items-center justify-between border-b bg-gray-50/50 py-5 px-8">
             <div>
               <CardTitle className="text-lg font-black text-gray-800">
                 Daily Slots
