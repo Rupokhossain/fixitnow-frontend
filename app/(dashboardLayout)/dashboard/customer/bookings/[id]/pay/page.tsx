@@ -21,7 +21,7 @@ import {
 } from "lucide-react"
 import { toast } from "sonner"
 
-import { IBooking } from "@/lib/types" 
+import { IBooking } from "@/lib/types"
 import { createPaymentAction } from "@/app/(dashboardLayout)/_actions/paymentActions"
 import { Badge } from "@/components/ui/badge"
 
@@ -36,6 +36,8 @@ export default function PaymentInitiationPage() {
   const handlePayment = async () => {
     try {
       const toastId = toast.loading("Connecting to secure payment gateway...")
+
+      sessionStorage.setItem("pendingBookingId", bookingId)
 
       const result = await createPaymentAction(bookingId)
 
