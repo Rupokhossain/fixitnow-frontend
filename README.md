@@ -9,10 +9,10 @@ Built with **Next.js 15**, **Node.js**, **Express.js**, **Prisma ORM**, **Postgr
 
 ## 🌐 Live Demo
 
-- **Frontend:** [https://fixitnow-frontend-lilac.vercel.app/]
-- **Backend :** [https://fix-it-now-pi.vercel.app/]
-- **Frontend Repository:** [https://github.com/Rupokhossain/fixitnow-frontend]
-- **Backend Repository:** [https://github.com/Rupokhossain/fixitnow-backend]
+- **Frontend:** https://fixitnow-frontend-lilac.vercel.app/
+- **Backend :** https://fix-it-now-pi.vercel.app/
+- **Frontend Repository:** https://github.com/Rupokhossain/fixitnow-frontend
+- **Backend Repository:** https://github.com/Rupokhossain/fixitnow-backend
 
 ---
 
