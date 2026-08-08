@@ -6,6 +6,7 @@ import OverviewCards from "../../_components/overview-card"
 import { useGetAllBookingsQuery } from "@/app/redux/api/bookingApi"
 import { Loader2 } from "lucide-react"
 import { IBooking, ICalculatedStats, IUser } from "@/lib/types"
+import DashboardSkeleton from "../../_components/dashboard-skeleton"
 
 
 const AdminPage = () => {
@@ -30,9 +31,7 @@ const AdminPage = () => {
 
   if (userLoading || bookingLoading) {
     return (
-      <div className="flex h-[70vh] items-center justify-center">
-        <Loader2 className="h-10 w-10 animate-spin text-blue-600" />
-      </div>
+      <DashboardSkeleton></DashboardSkeleton>
     )
   }
 

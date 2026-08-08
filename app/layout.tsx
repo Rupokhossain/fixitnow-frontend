@@ -1,17 +1,13 @@
-
 export const dynamic = "force-dynamic";
 
-
 import { Geist_Mono, Inter } from "next/font/google"
-
 import "./globals.css"
-
 import { cn } from "@/lib/utils"
 import { Toaster } from "sonner"
 import { StoreProvider } from "./providers/StoreProvider"
 import { getLoggedInUserAction } from "./(authLayout)/auth/_actions/authActions"
 import { cookies } from "next/headers"
-
+import { ThemeProvider } from "./providers/ThemeProvider";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" })
 
@@ -27,13 +23,12 @@ export default async function RootLayout({
 }>) {
   const cookieStore = await cookies()
   const token = cookieStore.get("accessToken")?.value || null
-
   const user = await getLoggedInUserAction()
   
   return (
     <html
       lang="en"
-      suppressHydrationWarning
+      suppressHydrationWarning // dark mode এর জন্য এটি মাস্ট
       className={cn(
         "antialiased",
         fontMono.variable,
@@ -41,13 +36,19 @@ export default async function RootLayout({
         inter.variable
       )}
     >
-      <body>
-        <div>
-          <StoreProvider initialUser={user} initialToken={token}>
+      <body className="min-h-screen bg-background">
+        <StoreProvider initialUser={user} initialToken={token}>
+          {/* ThemeProvider দিয়ে পুরো অ্যাপ মুড়িয়ে দিন */}
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
             {children}
             <Toaster position="top-center" richColors />
-          </StoreProvider>
-        </div>
+          </ThemeProvider>
+        </StoreProvider>
       </body>
     </html>
   )
