@@ -12,8 +12,7 @@ import {
   Sun,
   Menu,
   X,
-
-  CalendarCheck, 
+  CalendarCheck,
 } from "lucide-react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
@@ -163,7 +162,8 @@ export default function Navbar() {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent
                   align="end"
-                  className="z-[110] mt-2 w-64 rounded-2xl border-border p-2 shadow-2xl"
+                  sideOffset={8}
+                  className="z-[110] mt-2 w-64 rounded-2xl border-border bg-white p-2 shadow-2xl"
                 >
                   <div className="mb-2 flex items-center gap-3 rounded-xl bg-muted/50 p-3">
                     <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary font-bold text-white">
@@ -180,16 +180,9 @@ export default function Navbar() {
                   <DropdownMenuSeparator />
 
                   <Link href={getDashboardPath()}>
-                    <DropdownMenuItem className="group cursor-pointer gap-3 rounded-lg px-3 py-2.5 focus:bg-primary/10">
-                      <LayoutDashboard className="h-4 w-4 text-muted-foreground group-hover:text-primary" />
+                    <DropdownMenuItem className="group cursor-pointer gap-3 rounded-lg px-3 py-2.5 transition-colors hover:bg-[#4F46E5]! hover:text-white">
+                      <LayoutDashboard className="h-4 w-4 text-muted-foreground transition-colors group-hover:text-white" />
                       <span className="font-medium">Dashboard</span>
-                    </DropdownMenuItem>
-                  </Link>
-
-                  <Link href="/dashboard/my-bookings">
-                    <DropdownMenuItem className="group cursor-pointer gap-3 rounded-lg px-3 py-2.5 focus:bg-primary/10">
-                      <CalendarCheck className="h-4 w-4 text-muted-foreground group-hover:text-primary" />
-                      <span className="font-medium">My Bookings</span>
                     </DropdownMenuItem>
                   </Link>
 
@@ -197,9 +190,9 @@ export default function Navbar() {
 
                   <DropdownMenuItem
                     onClick={handleLogout}
-                    className="text-destructive focus:bg-destructive/10 focus:text-destructive cursor-pointer gap-3 rounded-lg px-3 py-2.5"
+                    className="group text-destructive cursor-pointer gap-3 rounded-lg px-3 py-2.5 transition-colors hover:bg-[#4F46E5]! hover:text-white"
                   >
-                    <LogOut className="h-4 w-4" />
+                    <LogOut className="h-4 w-4 transition-colors group-hover:text-white" />
                     <span className="font-bold">Logout Session</span>
                   </DropdownMenuItem>
                 </DropdownMenuContent>
