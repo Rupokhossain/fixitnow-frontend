@@ -5,8 +5,8 @@ import { jwtUtils } from "./app/utils/jwt"
 import { getRefreshToken } from "./service/refreshToken"
 import { JwtPayload } from "jsonwebtoken"
 
-const AUTH_ROUTES = ["/auth/login", "/auth/register"]
-const PUBLIC_ROUTES = ["/", "/services"]
+const AUTH_ROUTES = ["/auth/login", "/auth/register, /explore"]
+const PUBLIC_ROUTES = ["/", "/services", "/about", "/contact"]
 
 export async function proxy(request: NextRequest) {
   const isProduction = process.env.NODE_ENV === "production"
