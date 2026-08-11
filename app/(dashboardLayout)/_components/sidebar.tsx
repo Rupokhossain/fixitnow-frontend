@@ -43,7 +43,6 @@ export function Sidebar() {
     ...(role === "admin" ? [
       { label: "User Management", href: `${basePath}/users`, icon: Users },
       { label: "Categories", href: `${basePath}/categories`, icon: Layers },
-      { label: "Settings", href: `${basePath}/settings`, icon: Settings }
     ] : []),
   ]
 

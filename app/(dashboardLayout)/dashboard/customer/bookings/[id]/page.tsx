@@ -161,8 +161,8 @@ export default function ServiceDetailsPage() {
       <div className="mx-auto mt-8 max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
           {/* Main Info Column */}
-          <div className="space-y-6 lg:col-span-2">
-            <Card className="overflow-hidden rounded-2xl border-0 bg-white shadow-sm">
+          <div className="space-y-6 lg:col-span-2 ">
+            <Card className="overflow-hidden rounded-2xl border-0 bg-white shadow-sm ">
               <div className="relative h-80 bg-gray-200">
                 <Image
                   src={
@@ -208,7 +208,7 @@ export default function ServiceDetailsPage() {
             </Card>
 
             {/* Provider Section */}
-            <Card className="overflow-hidden rounded-2xl border-0 bg-white shadow-sm">
+            <Card className="overflow-hidden rounded-2xl border-0 bg-white shadow-sm ">
               <CardHeader className="border-b bg-gray-50/50 px-8 py-4">
                 <CardTitle className="text-base font-bold text-gray-700">
                   Expert Information
