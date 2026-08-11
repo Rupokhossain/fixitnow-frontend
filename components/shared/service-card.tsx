@@ -30,7 +30,7 @@ export default function ServiceCard({
       <div className="relative w-full h-48 bg-muted overflow-hidden">
         <Image
           src={image}
-          alt={serviceName}
+          alt="serviceName"
           fill
           className="object-cover transition-transform duration-500 group-hover:scale-110"
         />

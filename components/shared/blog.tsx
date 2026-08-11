@@ -2,7 +2,7 @@ import { Calendar, Clock, ArrowRight } from "lucide-react"
 import { Button } from "../ui/button"
 import Image from "next/image"
 
-export const BlogSection = () => {
+ const BlogSection = () => {
   const blogs = [
     {
       title: "5 Signs Your Home Plumbing Needs Urgent Attention",

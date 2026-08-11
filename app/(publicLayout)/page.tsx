@@ -19,9 +19,9 @@ import { ServiceSkeleton } from "@/components/shared/service-skeleton"
 import { Counter } from "@/components/shared/counter"
 import Image from "next/image"
 import { FAQSection } from "@/components/shared/faq"
-import { BlogSection } from "@/components/shared/blog"
 import { FinalCTA } from "@/components/shared/cta"
 import Footer from "@/components/shared/footar"
+import BlogSection from "./blog/page"
 
 
 interface IProvider {
