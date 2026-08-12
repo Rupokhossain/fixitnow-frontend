@@ -162,7 +162,7 @@ export function BookingsTable({ userRole = "customer", initialData = [] }: Booki
               <TableBody>
                 {filteredBookings.length > 0 ? (
                   filteredBookings.map((booking: any) => (
-                    <TableRow key={booking.id} className="border-b border-border/40 transition-all last:border-0 hover:bg-primary/[0.02] group">
+                    <TableRow key={booking.id} className="border-b border-border/40 transition-all last:border-0 hover:bg-primary/2 group">
                       <TableCell className="px-8 py-6 font-extrabold italic text-foreground uppercase tracking-tight">
                          <div className="flex items-center gap-3">
                             <Activity size={16} className="text-primary opacity-50" />
@@ -170,7 +170,7 @@ export function BookingsTable({ userRole = "customer", initialData = [] }: Booki
                          </div>
                       </TableCell>
                       <TableCell className="text-center">
-                        <div className="inline-flex flex-col items-center p-2 rounded-2xl bg-muted/50 border border-border min-w-[100px]">
+                        <div className="inline-flex flex-col items-center p-2 rounded-2xl bg-muted/50 border border-border min-w-25">
                           <p className="text-[10px] font-black text-foreground">{new Date(booking.scheduledAt).toLocaleDateString('en-GB', { day: '2-digit', month: 'short' })}</p>
                           <p className="text-[9px] text-primary font-bold uppercase tracking-widest">{new Date(booking.scheduledAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
                         </div>

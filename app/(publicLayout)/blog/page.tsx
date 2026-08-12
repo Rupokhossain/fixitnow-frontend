@@ -6,7 +6,7 @@ import { blogs } from "@/lib/blog-data"
 
 const BlogSection = () => {
   return (
-    <section className="relative overflow-hidden bg-background py-24">
+    <section className="relative overflow-hidden bg-background py-18">
       <div className="absolute top-0 right-0 -z-10 h-96 w-96 rounded-full bg-primary/5 blur-[120px]" />
 
       <div className="mx-auto max-w-7xl px-4">

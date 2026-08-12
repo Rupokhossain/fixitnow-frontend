@@ -11,7 +11,6 @@ import {
   Clock,
   Briefcase,
   LogOut,
-  Settings,
   ShieldCheck
 } from "lucide-react"
 import { cn } from "@/lib/utils"
@@ -19,7 +18,7 @@ import { useDispatch } from "react-redux"
 import { logout } from "@/app/redux/features/authSlice"
 import { logoutAction } from "@/app/(authLayout)/auth/_actions/logoutAction"
 
-export function Sidebar() {
+export function Sidebar({ isMobile = false }: { isMobile?: boolean }) {
   const pathname = usePathname()
   const dispatch = useDispatch()
 
@@ -47,7 +46,10 @@ export function Sidebar() {
   ]
 
   return (
-    <aside className="fixed top-0 left-0 z-50 hidden h-screen w-72 border-r border-border bg-card/50 backdrop-blur-xl transition-all lg:block">
+    <aside className={cn(
+      "flex h-full flex-col border-r border-border bg-white transition-all",
+      isMobile ? "w-full" : "fixed top-0 left-0 z-50 hidden h-screen w-72 lg:block bg-card/50 backdrop-blur-xl"
+    )}>
       <div className="flex h-full flex-col px-6 py-10">
         
         {/* Dashboard Logo */}
@@ -55,7 +57,9 @@ export function Sidebar() {
            <div className="bg-primary p-2 rounded-xl shadow-lg shadow-primary/20">
               <ShieldCheck className="h-6 w-6 text-white" />
            </div>
-           <span className="text-xl font-black tracking-tighter text-foreground italic">DASH<span className="text-primary NOT-italic">BOARD</span></span>
+           <span className="text-xl font-black tracking-tighter text-foreground italic uppercase">
+             Dash<span className="text-primary NOT-italic">board</span>
+           </span>
         </div>
 
         <nav className="flex-1 space-y-2">

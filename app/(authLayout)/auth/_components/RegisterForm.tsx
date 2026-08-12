@@ -1,5 +1,5 @@
 "use client"
-
+import { signIn } from "next-auth/react"
 import { useActionState, useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
 import {
@@ -103,9 +103,13 @@ const RegisterForm = () => {
         </div>
 
         {/* Social Register */}
-        <div className="grid grid-cols-2 gap-3">
+        {/* <div className="grid grid-cols-2 gap-3">
           <Button
             variant="outline"
+            type="button"
+            onClick={() =>
+              signIn("google", { callbackUrl: "/dashboard/customer" })
+            }
             className="w-full rounded-xl border-border/60 py-5 transition-all hover:bg-secondary/10"
           >
             <FcGoogle className="h-6 w-6" />
@@ -113,12 +117,16 @@ const RegisterForm = () => {
           </Button>
           <Button
             variant="outline"
+            type="button"
+            onClick={() =>
+              signIn("github", { callbackUrl: "/dashboard/customer" })
+            }
             className="w-full rounded-xl border-border/60 py-5 transition-all hover:bg-secondary/10"
           >
             <FaGithub className="mr-2 h-4 w-4" />
             GitHub
           </Button>
-        </div>
+        </div> */}
 
         <div className="relative">
           <div className="absolute inset-0 flex items-center">

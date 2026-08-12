@@ -4,7 +4,7 @@ import Link from "next/link"
 
 export const FinalCTA = () => {
   return (
-    <section className="relative overflow-hidden bg-background pt-16 pb-24">
+    <section className="relative overflow-hidden bg-background ">
       {/* 1. Background Elements - Soft & Airy */}
       <div className="absolute inset-0 -z-10">
         <div className="absolute top-1/2 left-1/2 h-150 w-150 -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary/5 blur-[120px]" />
@@ -14,7 +14,7 @@ export const FinalCTA = () => {
       </div>
 
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="group bg-card/40 relative overflow-hidden p-8 backdrop-blur-md transition-all hover:border-primary/20 md:p-16 lg:p-20">
+        <div className="group bg-card/40 relative overflow-hidden p-8 backdrop-blur-md transition-all hover:border-primary/20 md:p-16">
           <div className="relative z-10 grid grid-cols-1 items-center gap-16 lg:grid-cols-2">
             {/* Left Content - Call to Action */}
             <div className="space-y-8 text-center lg:text-left">

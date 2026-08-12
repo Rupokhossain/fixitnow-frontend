@@ -1,5 +1,5 @@
 "use client"
-
+import { signIn } from "next-auth/react"
 import { Button } from "@/components/ui/button"
 import {
   Card,
@@ -69,9 +69,13 @@ const LoginForm = () => {
 
       <CardContent className="space-y-6">
         {/* Social Login (Requirement 6) */}
-        <div className="grid grid-cols-2 gap-3">
+        {/* <div className="grid grid-cols-2 gap-3">
           <Button
             variant="outline"
+            type="button"
+            onClick={() =>
+              signIn("google", { callbackUrl: "/dashboard/customer" })
+            }
             className="w-full rounded-xl border-border/60 py-6 transition-all hover:bg-secondary/10"
           >
             <FcGoogle className="h-6 w-6" />
@@ -79,12 +83,16 @@ const LoginForm = () => {
           </Button>
           <Button
             variant="outline"
+            type="button"
+            onClick={() =>
+              signIn("github", { callbackUrl: "/dashboard/customer" })
+            }
             className="w-full rounded-xl border-border/60 py-6 transition-all hover:bg-secondary/10"
           >
             <FaGithub className="h-6 w-6" />
             GitHub
           </Button>
-        </div>
+        </div> */}
 
         <div className="relative">
           <div className="absolute inset-0 flex items-center">

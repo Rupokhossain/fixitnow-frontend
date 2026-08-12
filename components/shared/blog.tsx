@@ -28,7 +28,7 @@ import Image from "next/image"
   ]
 
   return (
-    <section className="bg-background py-20">
+    <section className="bg-background py-16">
       <div className="mx-auto max-w-7xl px-4">
         <div className="mb-16 flex flex-col justify-between gap-6 md:flex-row md:items-end">
           <div className="max-w-2xl text-center md:text-left">

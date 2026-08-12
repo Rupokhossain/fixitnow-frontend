@@ -24,7 +24,7 @@ const CustomerPage = () => {
   if (isLoading) return <DashboardSkeleton />
 
   return (
-    <div className="space-y-10 pb-10">
+    <div className="space-y-10 pb-10 lg:ml-10">
       
       {/* Header with Welcome Message */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
