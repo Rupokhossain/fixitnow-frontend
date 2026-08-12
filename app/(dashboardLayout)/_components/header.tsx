@@ -69,7 +69,7 @@ export function Header() {
           <DropdownMenuTrigger asChild>
             <Button
               variant="ghost"
-              className="h-12 rounded-2xl px-2 hover:bg-muted focus-visible:ring-0 focus-visible:ring-offset-0 transition-all"
+              className="h-12 rounded-2xl px-2 hover:bg-muted focus-visible:ring-0 focus-visible:ring-offset-0 transition-all bg-white"
             >
               <div className="flex items-center gap-3">
                 <Avatar className="h-9 w-9 border border-primary/20 shadow-sm">
@@ -102,15 +102,10 @@ export function Header() {
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem asChild className="cursor-pointer py-2.5 rounded-xl">
-               <Link href="/profile" className="flex items-center gap-3 font-bold text-sm">
-                 <User className="h-4 w-4 text-muted-foreground" /> My Profile
-               </Link>
-            </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem
               onClick={handleLogout}
-              className="cursor-pointer py-2.5 rounded-xl gap-3 text-red-500 font-bold focus:bg-red-50 focus:text-red-600"
+              className="cursor-pointer py-2.5 rounded-xl gap-3 text-red-500 font-bold bg-white"
             >
               <LogOut className="h-4 w-4" />
               <span>Logout Account</span>

@@ -167,7 +167,7 @@ export default function Navbar() {
                   sideOffset={8}
                   className="z-[110] mt-2 w-56 rounded-2xl border-border bg-white p-2 shadow-2xl"
                 >
-                  <div className="mb-2 flex items-center gap-3 rounded-xl bg-muted/50 p-3">
+                  <div className="mb-2 flex items-center gap-3 rounded-xl bg-white p-3">
                     <div className="flex h-9 w-9 items-center justify-center rounded-full bg-primary font-bold text-white">
                       {user.name?.charAt(0)}
                     </div>
@@ -186,7 +186,7 @@ export default function Navbar() {
                   <DropdownMenuSeparator />
                   <DropdownMenuItem
                     onClick={handleLogout}
-                    className="cursor-pointer gap-3 rounded-lg px-3 py-2.5 font-bold text-destructive transition-colors hover:bg-destructive hover:text-destructive-foreground"
+                    className="flex items-center cursor-pointer gap-3 rounded-lg px-3 py-2.5 font-bold text-destructive transition-colors hover:bg-primary hover:text-white"
                   >
                     <LogOut className="h-4 w-4" />
                     <span>Logout</span>
